@@ -1,0 +1,90 @@
+:root {
+  --bg: #020504;
+  --panel: rgba(5, 22, 15, 0.78);
+  --text: #f4fff8;
+  --muted: #a7c9b5;
+  --line: rgba(92, 255, 167, 0.3);
+  --line-strong: rgba(121, 255, 184, 0.55);
+  --green: #7dff9f;
+  --green-deep: #00bd61;
+  --neon: #b7ff45;
+  --shadow: 0 34px 100px rgba(0, 0, 0, 0.58);
+  --glow: 0 0 28px rgba(34, 255, 119, 0.35), 0 0 80px rgba(34, 255, 119, 0.14);
+}
+
+body {
+  background: radial-gradient(circle at 10% 0%, rgba(34, 255, 119, 0.22), transparent 34rem), linear-gradient(180deg, #010302 0%, #06110d 48%, #000201 100%);
+}
+
+.site-header, .footer {
+  background: linear-gradient(180deg, rgba(0, 6, 3, 0.94), rgba(0, 6, 3, 0.76));
+  border-color: var(--line);
+  box-shadow: 0 16px 55px rgba(0,0,0,.4), 0 0 28px rgba(34,255,119,.08);
+}
+
+.topbar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.topbar span:first-child, .brand-copy small, .eyebrow {
+  color: var(--neon);
+  text-shadow: 0 0 18px rgba(183,255,69,.5);
+}
+
+.brand-mark {
+  background: radial-gradient(circle at 30% 20%, #eaffd6, var(--green) 34%, var(--green-deep) 72%, #062316 100%);
+  box-shadow: var(--glow), inset 0 0 18px rgba(255,255,255,.22);
+}
+
+.brand-mark::after {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(0, 27, 11, .6);
+  transform: rotate(45deg);
+  border-radius: 5px;
+}
+
+h1, .section-title h2, .detail-content h2 {
+  text-shadow: 0 0 40px rgba(125,255,159,.14);
+}
+
+.primary-button {
+  background: linear-gradient(135deg, var(--neon), var(--green), var(--green-deep));
+  color: #011006;
+  box-shadow: var(--glow);
+}
+
+.hero-visual-card, .product-detail, .filters-panel, .trust-strip, .product-card, .category-card, .quality-card, .cart-panel, .checkout-panel, .contact-form, details {
+  border-color: var(--line-strong);
+  background: linear-gradient(180deg, rgba(125,255,159,.09), rgba(0,0,0,.48));
+  box-shadow: 0 22px 70px rgba(0,0,0,.3), inset 0 0 26px rgba(125,255,159,.035);
+}
+
+.diamond-glow {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  color: rgba(183,255,69,.48);
+  filter: drop-shadow(0 0 28px rgba(34,255,119,.8));
+}
+
+.diamond-frame {
+  position: absolute;
+  width: 118px;
+  height: 118px;
+  border: 1px solid rgba(183,255,69,.55);
+  transform: rotate(45deg);
+  border-radius: 14px;
+  box-shadow: 0 0 28px rgba(34,255,119,.28);
+}
+
+.product-pack, .detail-pack {
+  background: linear-gradient(145deg, #ffffff, #dfffbe 42%, #64ff97);
+  box-shadow: 0 30px 60px rgba(0,0,0,.38), 0 0 24px rgba(125,255,159,.4);
+}
