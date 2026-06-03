@@ -88,3 +88,92 @@ h1, .section-title h2, .detail-content h2 {
   background: linear-gradient(145deg, #ffffff, #dfffbe 42%, #64ff97);
   box-shadow: 0 30px 60px rgba(0,0,0,.38), 0 0 24px rgba(125,255,159,.4);
 }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.content-spacer {
+  margin-top: 4rem;
+}
+
+.quality-card strong,
+.guide-points strong {
+  color: var(--text);
+}
+
+.quality-card svg,
+.category-card svg,
+.guide-points svg {
+  color: var(--green);
+  filter: drop-shadow(0 0 14px rgba(34,255,119,.35));
+}
+
+.cart-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  flex-wrap: wrap;
+}
+
+.cart-actions button {
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0 .75rem;
+}
+
+.checkout-panel.checkout-form {
+  border-radius: 30px;
+}
+
+.contact-form h3,
+.checkout-panel h3,
+.quality-card h3 {
+  color: var(--text);
+}
+
+.age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: radial-gradient(circle at center, rgba(34,255,119,.18), rgba(0,0,0,.94) 62%);
+  backdrop-filter: blur(18px);
+}
+
+.age-gate-card {
+  width: min(560px, 100%);
+  border: 1px solid var(--line-strong);
+  border-radius: 36px;
+  padding: 2rem;
+  background: linear-gradient(180deg, rgba(8,38,25,.92), rgba(0,0,0,.92));
+  box-shadow: var(--shadow), var(--glow);
+  text-align: center;
+}
+
+.age-gate-mark {
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 1.2rem;
+  border-radius: 26px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--glow);
+}
+
+.age-gate-card p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
