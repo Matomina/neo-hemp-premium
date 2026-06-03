@@ -1,4 +1,4 @@
-import { ShieldCheck, ShoppingCart } from 'lucide-react';
+import { ShieldCheck, ShoppingCart, Sparkles } from 'lucide-react';
 import type { Product } from '../types';
 import { categoryLabels } from '../data/products';
 
@@ -13,7 +13,9 @@ export function ProductCard({ product, onAdd, onView }: ProductCardProps) {
     <article className="product-card">
       <button className={`product-visual ${product.imageTone}`} onClick={() => onView(product)} aria-label={`Voir ${product.name}`}>
         <span className="product-orb" />
+        <span className="diamond-frame" aria-hidden="true" />
         <span className="product-pack">{product.name.slice(0, 2).toUpperCase()}</span>
+        {product.isBestSeller ? <span className="visual-badge"><Sparkles size={13} /> Best-seller</span> : null}
       </button>
       <div className="product-content">
         <div className="product-meta">
