@@ -1,49 +1,106 @@
-import { Menu, Search, ShoppingBag, UserRound } from 'lucide-react';
+import { Menu, Search, ShoppingBag, UserRound, X } from 'lucide-react';
+import { useState } from 'react';
+import type { CategorySlug } from '../types';
 
 type HeaderProps = {
   cartCount: number;
-  onNavigate: (section: string) => void;
+  currentPath: string;
+  onNavigate: (path: string) => void;
+  onCategorySelect: (category: CategorySlug | 'all') => void;
 };
 
 const navItems = [
-  ['boutique', 'Boutique'],
-  ['fleurs', 'Fleurs'],
-  ['resines', 'Résines'],
-  ['cosmetiques', 'Cosmétiques'],
-  ['accessoires', 'Accessoires'],
-  ['guide', 'Guide CBD'],
-  ['faq', 'FAQ'],
+  { path: '/boutique', label: 'Boutique' },
+  { path: '/categorie/fleurs', label: 'Fleurs' },
+  { path: '/categorie/resines', label: 'Résines' },
+  { path: '/categorie/cosmetiques', label: 'Cosmétiques' },
+  { path: '/categorie/accessoires', label: 'Accessoires' },
+  { path: '/guide-cbd-legal', label: 'Guide CBD' },
+  { path: '/certificats-tracabilite', label: 'Certificats' },
 ];
 
-export function Header({ cartCount, onNavigate }: HeaderProps) {
+const categoryPathMap: Partial<Record<string, CategorySlug>> = {
+  '/categorie/fleurs': 'fleurs',
+  '/categorie/resines': 'resines',
+  '/categorie/cosmetiques': 'cosmetiques',
+  '/categorie/accessoires': 'accessoires',
+};
+
+export function Header({ cartCount, currentPath, onNavigate, onCategorySelect }: HeaderProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const goTo = (path: string) => {
+    const category = categoryPathMap[path];
+    if (category) onCategorySelect(category);
+    if (path === '/boutique') onCategorySelect('all');
+    onNavigate(path);
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className="site-header">
-      <div className="topbar">Produits contrôlés • THC conforme • Livraison suivie • Démarche responsable</div>
+      <div className="topbar">
+        <span>Culture Bio Diamant</span>
+        <span>Produits contrôlés</span>
+        <span>THC conforme</span>
+        <span>Livraison suivie</span>
+      </div>
+
       <nav className="navbar container" aria-label="Navigation principale">
-        <button className="mobile-menu" aria-label="Ouvrir le menu">
-          <Menu size={22} />
-        </button>
-        <button className="brand" onClick={() => onNavigate('home')}>
-          <span className="brand-mark">NH</span>
-          <span>
-            <strong>Neo Hemp</strong>
-            <small>Premium CBD</small>
+        <button className="brand" onClick={() => goTo('/')} aria-label="Retour à l’accueil Culture Bio Diamant">
+          <span className="brand-mark" aria-hidden="true">CBD</span>
+          <span className="brand-copy">
+            <strong>Culture Bio Diamant</strong>
+            <small>Premium Naturel</small>
           </span>
         </button>
-        <div className="nav-links">
-          {navItems.map(([target, label]) => (
-            <button key={target} onClick={() => onNavigate(target)}>{label}</button>
+
+        <div className="nav-links" aria-label="Liens principaux">
+          {navItems.map((item) => (
+            <button
+              key={item.path}
+              className={currentPath === item.path ? 'active' : ''}
+              onClick={() => goTo(item.path)}
+            >
+              {item.label}
+            </button>
           ))}
         </div>
+
         <div className="nav-actions">
-          <button aria-label="Rechercher"><Search size={20} /></button>
-          <button aria-label="Compte client"><UserRound size={20} /></button>
-          <button className="cart-button" onClick={() => onNavigate('panier')} aria-label="Voir le panier">
+          <button onClick={() => goTo('/boutique')} aria-label="Rechercher dans la boutique">
+            <Search size={20} />
+          </button>
+          <button onClick={() => goTo('/compte')} aria-label="Compte client">
+            <UserRound size={20} />
+          </button>
+          <button className="cart-button" onClick={() => goTo('/panier')} aria-label="Voir le panier">
             <ShoppingBag size={20} />
             <span>{cartCount}</span>
           </button>
+          <button
+            className="mobile-menu"
+            aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((value) => !value)}
+          >
+            {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
       </nav>
+
+      {isMenuOpen ? (
+        <div className="mobile-panel container">
+          {navItems.map((item) => (
+            <button key={item.path} onClick={() => goTo(item.path)}>
+              {item.label}
+            </button>
+          ))}
+          <button onClick={() => goTo('/a-propos')}>À propos</button>
+          <button onClick={() => goTo('/contact')}>Contact</button>
+          <button onClick={() => goTo('/livraison-retours')}>Livraison & retours</button>
+        </div>
+      ) : null}
     </header>
   );
 }
