@@ -5,7 +5,6 @@ import { ProductCard } from './components/ProductCard';
 import { SectionTitle } from './components/SectionTitle';
 import { Footer } from './components/Footer';
 import { categoryDescriptions, categoryLabels, products } from './data/products';
-import { faqs } from './data/faqs';
 import type { CartItem, CategorySlug, Product } from './types';
 import visualMockup from './assets/maquette-boutique-cbd-visuelle.png';
 
