@@ -10,13 +10,13 @@ type HeaderProps = {
 };
 
 const navItems = [
-  { path: '/boutique', label: 'Boutique' },
+  { path: '/boutique', label: 'Produits' },
   { path: '/categorie/fleurs', label: 'Fleurs' },
   { path: '/categorie/resines', label: 'Résines' },
-  { path: '/categorie/cosmetiques', label: 'Cosmétiques' },
-  { path: '/categorie/accessoires', label: 'Accessoires' },
-  { path: '/guide-cbd-legal', label: 'Guide CBD' },
-  { path: '/certificats-tracabilite', label: 'Certificats' },
+  { path: '/a-propos', label: 'À propos' },
+  { path: '/guide-cbd-legal', label: 'Guide' },
+  { path: '/forum-live', label: 'Forum live' },
+  { path: '/contact', label: 'Contact' },
 ];
 
 const categoryPathMap: Partial<Record<string, CategorySlug>> = {
@@ -41,9 +41,9 @@ export function Header({ cartCount, currentPath, onNavigate, onCategorySelect }:
     <header className="site-header">
       <div className="topbar">
         <span>Culture Bio Diamant</span>
-        <span>Produits contrôlés</span>
-        <span>THC conforme</span>
-        <span>Livraison suivie</span>
+        <span>100% naturel premium</span>
+        <span>Contrôlé & certifié</span>
+        <span>Univers noir néon</span>
       </div>
 
       <nav className="navbar container" aria-label="Navigation principale">
@@ -71,7 +71,7 @@ export function Header({ cartCount, currentPath, onNavigate, onCategorySelect }:
           <button onClick={() => goTo('/boutique')} aria-label="Rechercher dans la boutique">
             <Search size={20} />
           </button>
-          <button onClick={() => goTo('/compte')} aria-label="Compte client">
+          <button onClick={() => goTo('/connexion')} aria-label="Connexion client">
             <UserRound size={20} />
           </button>
           <button className="cart-button" onClick={() => goTo('/panier')} aria-label="Voir le panier">
@@ -96,9 +96,10 @@ export function Header({ cartCount, currentPath, onNavigate, onCategorySelect }:
               {item.label}
             </button>
           ))}
-          <button onClick={() => goTo('/a-propos')}>À propos</button>
-          <button onClick={() => goTo('/contact')}>Contact</button>
-          <button onClick={() => goTo('/livraison-retours')}>Livraison & retours</button>
+          <button onClick={() => goTo('/categorie/cosmetiques')}>Cosmétiques</button>
+          <button onClick={() => goTo('/categorie/accessoires')}>Accessoires</button>
+          <button onClick={() => goTo('/certificats-tracabilite')}>Certificats</button>
+          <button onClick={() => goTo('/mentions-legales')}>Mentions légales</button>
         </div>
       ) : null}
     </header>
