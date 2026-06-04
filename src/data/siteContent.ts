@@ -1,68 +1,118 @@
 export const flyerInsights = [
   {
-    title: '100% naturel premium',
-    text: 'Le flyer installe une promesse simple : une expérience haut de gamme, naturelle et maîtrisée. Le site doit donc expliquer la sélection, la traçabilité et la sobriété des ingrédients sans ton agressif.',
+    title: 'Sélection rigoureuse',
+    text: "Chaque produit passe par un audit fournisseur complet avant d'être référencé. Lot, origine, taux et certificat sont vérifiés.",
   },
   {
     title: 'Qualité diamant',
-    text: 'Le diamant devient le symbole de la sélection : peu de produits, mais mieux présentés, mieux documentés et plus rassurants pour le client.',
+    text: "La marque Culture Bio Diamant incarne l'excellence : peu de produits, mais chacun parfaitement documenté et présenté.",
   },
   {
-    title: 'Contrôlé et certifié',
-    text: 'Le macaron laboratoire du flyer impose une page dédiée aux certificats, aux lots, aux tests et aux documents fournisseur avant toute mise en production.',
+    title: 'Contrôlé & certifié',
+    text: "Analyses laboratoire disponibles pour chaque lot. La page Certificats & traçabilité centralise tous les documents vérifiables.",
   },
   {
-    title: 'Univers noir et vert fluo',
-    text: 'La charte repose sur un noir profond, des halos verts, des reflets végétaux et des bordures lumineuses. Le texte doit rester élégant, calme et premium.',
+    title: 'CBD légal & conforme',
+    text: "Tous les produits respectent le seuil THC ≤ 0,30%. Aucun cannabinoïde synthétique, aucun HHC, aucun THCP.",
   },
 ];
 
 export const homepageStory = [
   {
-    title: 'Une boutique pensée comme un écrin',
-    text: 'Culture Bio Diamant ne doit pas ressembler à une boutique CBD générique. L’accueil doit raconter un univers : noir profond, lumière verte, sélection courte, produit premium et confiance visible dès les premières secondes.',
+    title: "Un catalogue sélectionné avec exigence",
+    text: "Culture Bio Diamant ne référence que des produits avec preuves complètes : taux CBD, origine, lot de production et certificat d'analyse à jour.",
   },
   {
-    title: 'Une sélection lisible avant tout',
-    text: 'La V1 doit privilégier quelques produits bien expliqués plutôt qu’un catalogue trop large. Chaque fiche doit montrer le taux, l’origine, le lot, les précautions et l’état du certificat.',
+    title: 'Transparence absolue sur chaque lot',
+    text: "Chaque produit affiche son numéro de lot, son origine exacte et le statut de son certificat. Aucune exception.",
   },
   {
-    title: 'Un discours naturel, pas médical',
-    text: 'Le ton doit être rassurant et commercial, mais jamais thérapeutique. On parle de qualité, de traçabilité, d’expérience, de sélection et de conformité.',
+    title: 'Un ton responsable, jamais médical',
+    text: "Nos textes sont informatifs, premium et conformes. Aucune allégation thérapeutique ni promesse médicale ne sera tolérée.",
   },
 ];
 
 export const premiumValues = [
   {
     title: 'Culture biologique',
-    text: 'Une approche inspirée du flyer : cultivé sans promesse excessive, avec une exigence de sourcing clair et une présentation transparente.',
+    text: 'Chanvre cultivé sans pesticides chimiques, dans le respect des pratiques agricoles responsables.',
   },
   {
     title: 'Qualité diamant',
-    text: 'Chaque produit doit être choisi pour sa cohérence avec la marque : aspect premium, informations complètes, traçabilité et présentation soignée.',
+    text: 'Sélection ultra-rigoureuse pour ne référencer que des produits réellement premium et documentés.',
   },
   {
     title: 'Extraction pure',
-    text: 'Le site doit prévoir un espace de pédagogie sur les procédés, les documents fournisseur et les contrôles nécessaires avant publication.',
+    text: 'Procédés maîtrisés pour des concentrations précises, des profils terpéniques intacts et une traçabilité totale.',
   },
   {
-    title: 'Contrôle certifié',
-    text: 'La confiance vient des preuves : analyse, lot, origine, certificat et précautions visibles, avec des textes sobres et vérifiables.',
+    title: 'Contrôlé & certifié',
+    text: 'Analyses laboratoire disponibles pour chaque lot. Certificats consultables, vérifiables et datés.',
+  },
+];
+
+export const whyUs = [
+  {
+    icon: 'shield',
+    title: 'THC ≤ 0,30% garanti',
+    text: 'Chaque lot est testé en laboratoire indépendant pour garantir la conformité légale française et européenne.',
+  },
+  {
+    icon: 'cert',
+    title: 'Certificats disponibles',
+    text: "Aucun produit n'est publié sans certificat d'analyse valide. Consultez les preuves directement depuis chaque fiche.",
+  },
+  {
+    icon: 'select',
+    title: 'Sélection premium',
+    text: 'Moins de 20 références, toutes vérifiées. Qualité > quantité. Chaque produit mérite sa place dans le catalogue.',
+  },
+  {
+    icon: 'ship',
+    title: 'Livraison suivie',
+    text: 'Emballage discret, livraison suivie partout en France. Packaging premium recyclé pour une marque responsable.',
+  },
+];
+
+export const testimonials = [
+  {
+    name: 'Alexandre M.',
+    tag: 'Fleurs CBD',
+    rating: 5,
+    text: "Diamond Kush est vraiment exceptionnelle. Le taux CBD affiché correspond parfaitement aux analyses disponibles. Packaging premium, livraison rapide.",
+  },
+  {
+    name: 'Sophie L.',
+    tag: 'Résines CBD',
+    rating: 5,
+    text: "Gold Resin est la meilleure résine CBD que j'aie jamais testée. Le certificat d'analyse est disponible, c'est rassurant. Je recommande vivement.",
+  },
+  {
+    name: 'Thomas R.',
+    tag: 'Cosmétiques',
+    rating: 5,
+    text: "Bio Serenity Oil est formulée avec sérieux. La liste INCI est propre, pas d'ingrédients inutiles. Une marque qui prend son référencement au sérieux.",
+  },
+  {
+    name: 'Camille D.',
+    tag: 'Accessoires',
+    rating: 5,
+    text: "Diamond Grinder XL est solide, précis et beau. La qualité de l'aluminium est vraiment premium. Rien à voir avec les grinders bas de gamme.",
   },
 ];
 
 export const aboutBlocks = [
   {
     title: 'Notre vision',
-    text: 'Culture Bio Diamant associe l’univers végétal à une esthétique premium. La marque veut proposer une expérience claire, élégante et rassurante, où chaque produit est présenté avec soin.',
+    text: "Culture Bio Diamant incarne l'excellence du CBD premium. Chaque produit sélectionné reflète notre engagement : qualité, transparence, conformité.",
   },
   {
     title: 'Notre méthode',
-    text: 'La boutique avance avec une logique professionnelle : sélection courte, informations produit structurées, conformité, certificats, pages légales et tunnel d’achat simple avant toute mise en production réelle.',
+    text: "Audits fournisseurs, analyses laboratoire, fiches produit complètes et mises à jour régulières. Rien n'est laissé au hasard.",
   },
   {
     title: 'Notre ton',
-    text: 'Naturel, précis, premium. Les textes doivent donner envie sans promettre d’effet médical. La confiance vient de la qualité perçue et des preuves affichées.',
+    text: "Premium, précis, responsable. Jamais médical. La confiance se construit avec des preuves vérifiables, pas des promesses vagues.",
   },
 ];
 
@@ -71,36 +121,36 @@ export const legalBlocks = [
     path: '/mentions-legales',
     eyebrow: 'Légal',
     title: 'Mentions légales',
-    intro: 'Cette page structure les informations obligatoires à compléter avant la mise en ligne officielle de Culture Bio Diamant.',
-    points: ['Raison sociale à compléter', 'SIRET et RCS à compléter', 'Adresse du siège à compléter', 'Responsable de publication à compléter', 'Hébergeur à compléter', 'Contact professionnel à compléter'],
+    intro: 'Informations légales obligatoires à compléter avant mise en ligne officielle.',
+    points: ['Raison sociale à compléter', 'SIRET et RCS à compléter', 'Adresse siège à compléter', 'Responsable publication à compléter', 'Hébergeur à compléter', 'Contact professionnel à compléter'],
   },
   {
     path: '/cgv',
     eyebrow: 'Conditions',
     title: 'Conditions générales de vente',
-    intro: 'Les conditions d’utilisation et de vente doivent cadrer le parcours client, les commandes, les prix, la livraison, les retours et les restrictions applicables.',
-    points: ['Commande simulée dans la V1', 'Prix affichés à confirmer', 'Disponibilité produit à confirmer', 'Livraison et retours à formaliser', 'Paiement compatible CBD à valider', 'Documents produit à associer avant vente'],
+    intro: "Les CGV cadrent les commandes, prix, livraisons, retours et restrictions applicables aux produits CBD.",
+    points: ["Catalogue V1 — aucun paiement live", 'Prix indicatifs à confirmer', 'Disponibilité à confirmer', 'Livraison à formaliser', 'Paiement CBD à valider', 'Documents produit à associer'],
   },
   {
     path: '/confidentialite',
     eyebrow: 'Données',
     title: 'Politique de confidentialité',
-    intro: 'La V1 ne transmet aucune donnée à un backend. Cette page prépare la future politique de confidentialité lorsque le compte client et le paiement seront branchés.',
-    points: ['Données collectées à définir', 'Finalité des formulaires à expliquer', 'Durée de conservation à préciser', 'Droits utilisateur à documenter', 'Outils analytics à valider'],
+    intro: "La V1 ne transmet aucune donnée à un backend. Cette page prépare la politique RGPD finale.",
+    points: ['Données collectées à définir', 'Finalités à expliquer', 'Conservation à préciser', 'Droits utilisateur à documenter', 'Analytics à valider'],
   },
   {
     path: '/cookies',
     eyebrow: 'Cookies',
     title: 'Gestion des cookies',
-    intro: 'La gestion des cookies sera finalisée lorsque les outils de mesure et de suivi seront choisis.',
-    points: ['Cookies techniques', 'Mesure d’audience éventuelle', 'Consentement utilisateur', 'Préférences modifiables', 'Politique à finaliser avant production'],
+    intro: 'La gestion des cookies sera finalisée lors de la mise en production avec les outils choisis.',
+    points: ['Cookies techniques', "Mesure d'audience", 'Consentement', 'Préférences', 'À finaliser'],
   },
   {
     path: '/retractation',
     eyebrow: 'Service client',
     title: 'Droit de rétractation',
-    intro: 'Cette page prépare la future procédure de retour et de rétractation selon les produits réellement commercialisés.',
-    points: ['Délai applicable à confirmer', 'Exceptions produit à vérifier', 'Adresse retour à compléter', 'État des produits retournés à préciser', 'Procédure de remboursement à formaliser'],
+    intro: 'Procédure de retour et rétractation à finaliser selon les produits commercialisés.',
+    points: ['Délai à confirmer', 'Exceptions produit', 'Adresse retour à compléter', 'État produits retournés', 'Procédure remboursement'],
   },
 ];
 
@@ -108,16 +158,16 @@ export const liveForumPosts = [
   {
     author: 'Équipe Culture Bio Diamant',
     tag: 'Annonce',
-    text: 'Bienvenue dans le forum live de la V1. Cet espace simulé servira à afficher les nouveautés, les réponses clients et les conseils d’utilisation responsable.',
+    text: "Bienvenue sur notre espace d'information. Cet espace sera dédié aux nouveautés, réponses et conseils d'utilisation responsable.",
   },
   {
     author: 'Client premium',
     tag: 'Question',
-    text: 'Où trouver les certificats produit ? La réponse doit être visible depuis la fiche produit et la page Certificats & traçabilité.',
+    text: "Où trouver les certificats produit ? Directement depuis chaque fiche produit et la page Certificats & traçabilité.",
   },
   {
-    author: 'Support',
+    author: 'Support Culture Bio Diamant',
     tag: 'Réponse',
-    text: 'Chaque produit réel devra afficher son lot, son origine et son analyse. La V1 prépare déjà cette structure avant intégration backend.',
+    text: "Chaque produit affiche son lot, son origine et son analyse. Aucun produit n'est publié sans dossier fournisseur complet.",
   },
 ];
