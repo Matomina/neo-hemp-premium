@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Pack Accessoires Essentials">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#231d1d" />
+      <stop offset="58%" stop-color="#0d1016" />
+      <stop offset="100%" stop-color="#050608" />
+    </linearGradient>
+    <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffe8b8" />
+      <stop offset="100%" stop-color="#e0b769" />
+    </linearGradient>
+    <filter id="blur-xl" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="70" />
+    </filter>
+    <filter id="blur-md" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="24" />
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="28" stdDeviation="36" flood-color="#000000" flood-opacity="0.42" />
+    </filter>
+  </defs>
+  
+  <rect width="800" height="800" fill="#090b10" />
+  <rect width="800" height="800" fill="url(#bg)" />
+  <ellipse cx="400" cy="180" rx="280" ry="100" fill="#df9fff" opacity="0.16" filter="url(#blur-xl)" />
+  <ellipse cx="400" cy="690" rx="290" ry="70" fill="#000000" opacity="0.68" filter="url(#blur-md)" />
+  <rect x="44" y="44" width="712" height="712" rx="44" fill="none" stroke="rgba(255,255,255,0.08)" />
+
+  
+  <g filter="url(#shadow)">
+    <path d="M262 354 L400 288 L540 354 L400 420 Z" fill="#e0b769" opacity="0.84" />
+    <path d="M262 354 L262 544 L400 620 L400 420 Z" fill="#231d1d" />
+    <path d="M540 354 L540 544 L400 620 L400 420 Z" fill="#ffe8b8" opacity="0.42" />
+    <rect x="326" y="464" width="46" height="72" rx="12" fill="#f6d674" opacity="0.7" />
+    <rect x="380" y="448" width="40" height="88" rx="12" fill="#8bc9ff" opacity="0.72" />
+    <rect x="428" y="476" width="42" height="60" rx="12" fill="#df9eff" opacity="0.7" />
+  </g>
+
+</svg>

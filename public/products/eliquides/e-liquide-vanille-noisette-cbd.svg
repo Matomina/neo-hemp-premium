@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="E-liquide Vanille Noisette CBD">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1c2025" />
+      <stop offset="58%" stop-color="#0d1016" />
+      <stop offset="100%" stop-color="#050608" />
+    </linearGradient>
+    <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff0cf" />
+      <stop offset="100%" stop-color="#d4b37b" />
+    </linearGradient>
+    <filter id="blur-xl" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="70" />
+    </filter>
+    <filter id="blur-md" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="24" />
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="28" stdDeviation="36" flood-color="#000000" flood-opacity="0.42" />
+    </filter>
+  </defs>
+  
+  <rect width="800" height="800" fill="#090b10" />
+  <rect width="800" height="800" fill="url(#bg)" />
+  <ellipse cx="400" cy="180" rx="280" ry="100" fill="#ffe3a8" opacity="0.16" filter="url(#blur-xl)" />
+  <ellipse cx="400" cy="690" rx="290" ry="70" fill="#000000" opacity="0.68" filter="url(#blur-md)" />
+  <rect x="44" y="44" width="712" height="712" rx="44" fill="none" stroke="rgba(255,255,255,0.08)" />
+
+  
+    <g filter="url(#shadow)">
+      <rect x="310" y="258" width="180" height="326" rx="34" fill="#f8fbff" opacity="0.12" />
+      <rect x="338" y="300" width="124" height="236" rx="18" fill="url(#liquid)" opacity="0.95" />
+      <rect x="352" y="214" width="96" height="92" rx="18" fill="#dfe9f5" />
+      <rect x="374" y="188" width="52" height="42" rx="10" fill="#b7c0cd" />
+      <ellipse cx="552" cy="566" rx="36" ry="24" fill="#b27e48" transform="rotate(-12 552 566)" /><ellipse cx="604" cy="554" rx="18" ry="14" fill="#825734" /><path d="M520 520 C548 494 578 486 620 492" stroke="#ead8a1" stroke-width="7" stroke-linecap="round" />
+      <path d="M208 266 C228 250 244 248 268 258" stroke="#ffe3a8" stroke-width="12" stroke-linecap="round" opacity="0.3" />
+      <path d="M530 238 C560 206 598 202 630 224" stroke="#ffe3a8" stroke-width="12" stroke-linecap="round" opacity="0.3" />
+    </g>
+  
+</svg>

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350">
+  <defs>
+    <radialGradient id="glow-h" cx="50%" cy="50%" r="40%">
+      <stop offset="0%" stop-color="#ffe4a0" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bottle-h" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a4a3a"/>
+      <stop offset="50%" stop-color="#1a3028"/>
+      <stop offset="100%" stop-color="#0d1a14"/>
+    </linearGradient>
+    <linearGradient id="bottle-shine" x1="0%" y1="0%" x2="30%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+    <linearGradient id="oil-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#b45309" stop-opacity="0.35"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="500" height="350" fill="#020208"/>
+  <ellipse cx="250" cy="175" rx="160" ry="130" fill="url(#glow-h)"/>
+
+  <!-- Oil dropper bottle -->
+  <g transform="translate(250,175)">
+    <!-- Dropper cap -->
+    <rect x="-8" y="-110" width="16" height="25" rx="8" fill="#c4a23a" opacity="0.9"/>
+    <!-- Dropper bulb -->
+    <ellipse cx="0" cy="-120" rx="11" ry="14" fill="#9a7b2a" opacity="0.85"/>
+    <!-- Dropper needle -->
+    <rect x="-1.5" y="-85" width="3" height="18" rx="1.5" fill="#ffe4a0" opacity="0.7"/>
+    <!-- Bottle neck -->
+    <rect x="-12" y="-72" width="24" height="22" rx="4" fill="url(#bottle-h)"/>
+    <!-- Bottle shoulder curve -->
+    <path d="M-12,-50 C-12,-50 -22,-42 -25,-20 L-25,62 Q-25,70 -18,70 L18,70 Q25,70 25,62 L25,-20 C25,-42 12,-50 12,-50Z"
+          fill="url(#bottle-h)" opacity="0.95"/>
+    <!-- Bottle shine -->
+    <path d="M-12,-50 C-12,-50 -22,-42 -25,-20 L-25,62 Q-25,70 -18,70 L-8,70 L-8,-50Z"
+          fill="url(#bottle-shine)" opacity="0.7"/>
+    <!-- Oil fill level (golden liquid inside) -->
+    <clipPath id="bottle-clip">
+      <path d="M-22,-15 L-22,62 Q-22,68 -16,68 L16,68 Q22,68 22,62 L22,-15Z"/>
+    </clipPath>
+    <rect x="-22" y="5" width="44" height="60" fill="url(#oil-fill)" clip-path="url(#bottle-clip)"/>
+    <!-- Label band on bottle -->
+    <rect x="-21" y="-10" width="42" height="40" rx="3" fill="rgba(255,228,160,0.10)"/>
+    <text x="0" y="8" text-anchor="middle" fill="rgba(255,228,160,0.55)"
+          font-family="Georgia,serif" font-size="6" letter-spacing="1">CBD</text>
+    <text x="0" y="17" text-anchor="middle" fill="rgba(255,228,160,0.40)"
+          font-family="sans-serif" font-size="4.5" letter-spacing="1">USAGE EXTERNE</text>
+    <!-- Bottle base -->
+    <rect x="-25" y="62" width="50" height="8" rx="4" fill="#0d1a14" opacity="0.8"/>
+  </g>
+
+  <!-- Drop accent -->
+  <path d="M275,120 C275,120 278,112 278,108 C278,104.5 275.5,102 273,105 C270.5,102 268,104.5 268,108 C268,112 271,120 271,120Z"
+        fill="#ffe4a0" opacity="0.40"/>
+
+  <text x="250" y="325" text-anchor="middle"
+        fill="rgba(255,255,255,0.28)" font-family="Georgia,serif"
+        font-size="10" letter-spacing="5">HUILES CBD</text>
+
+  <polygon points="250,302 256,308 250,314 244,308"
+           fill="none" stroke="#ffe4a0" stroke-width="0.8" opacity="0.35"/>
+</svg>

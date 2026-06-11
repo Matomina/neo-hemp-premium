@@ -4,8 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "generate:photo-crops": "node scripts/crop-product-photo-sheets.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "generate:product-images": "node scripts/generate-product-images.mjs",
     "preview": "vite preview",
     "lint": "eslint ."
   },

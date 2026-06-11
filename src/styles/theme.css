@@ -1,25 +1,29 @@
 :root {
-  --bg: #020504;
-  --panel: rgba(5, 22, 15, 0.78);
-  --text: #f4fff8;
-  --muted: #a7c9b5;
-  --line: rgba(92, 255, 167, 0.3);
-  --line-strong: rgba(121, 255, 184, 0.55);
-  --green: #7dff9f;
-  --green-deep: #00bd61;
-  --neon: #b7ff45;
-  --shadow: 0 34px 100px rgba(0, 0, 0, 0.58);
-  --glow: 0 0 28px rgba(34, 255, 119, 0.35), 0 0 80px rgba(34, 255, 119, 0.14);
+  --bg: #020104;
+  --panel: rgba(9, 7, 16, 0.82);
+  --text: #faf8ff;
+  --muted: #bdb5cb;
+  --line: rgba(214, 255, 49, 0.22);
+  --line-strong: rgba(195, 73, 255, 0.42);
+  --green: #d6ff31;
+  --green-deep: #97ff00;
+  --violet: #bb35ff;
+  --neon: #e2ff3f;
+  --shadow: 0 34px 110px rgba(0, 0, 0, 0.72);
+  --glow: 0 0 30px rgba(214, 255, 49, 0.28), 0 0 78px rgba(187, 53, 255, 0.16);
 }
 
 body {
-  background: radial-gradient(circle at 10% 0%, rgba(34, 255, 119, 0.22), transparent 34rem), linear-gradient(180deg, #010302 0%, #06110d 48%, #000201 100%);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(214, 255, 49, 0.14), transparent 28rem),
+    radial-gradient(circle at 86% 8%, rgba(187, 53, 255, 0.16), transparent 26rem),
+    linear-gradient(180deg, #000000 0%, #020104 32%, #030108 100%);
 }
 
 .site-header, .footer {
-  background: linear-gradient(180deg, rgba(0, 6, 3, 0.94), rgba(0, 6, 3, 0.76));
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.94), rgba(8, 4, 12, 0.82));
   border-color: var(--line);
-  box-shadow: 0 16px 55px rgba(0,0,0,.4), 0 0 28px rgba(34,255,119,.08);
+  box-shadow: 0 16px 55px rgba(0,0,0,.56), 0 0 28px rgba(214,255,49,.08), 0 0 44px rgba(187,53,255,.08);
 }
 
 .topbar {
@@ -32,7 +36,7 @@ body {
 
 .topbar span:first-child, .brand-copy small, .eyebrow {
   color: var(--neon);
-  text-shadow: 0 0 18px rgba(183,255,69,.5);
+  text-shadow: 0 0 18px rgba(214,255,49,.5);
 }
 
 .brand-mark {
@@ -70,18 +74,18 @@ h1, .section-title h2, .detail-content h2 {
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  color: rgba(183,255,69,.48);
-  filter: drop-shadow(0 0 28px rgba(34,255,119,.8));
+  color: rgba(214,255,49,.48);
+  filter: drop-shadow(0 0 28px rgba(214,255,49,.72)) drop-shadow(0 0 36px rgba(187,53,255,.25));
 }
 
 .diamond-frame {
   position: absolute;
   width: 118px;
   height: 118px;
-  border: 1px solid rgba(183,255,69,.55);
+  border: 1px solid rgba(214,255,49,.55);
   transform: rotate(45deg);
   border-radius: 14px;
-  box-shadow: 0 0 28px rgba(34,255,119,.28);
+  box-shadow: 0 0 28px rgba(214,255,49,.28), 0 0 44px rgba(187,53,255,.12);
 }
 
 .product-pack, .detail-pack {

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350">
+  <defs>
+    <radialGradient id="glow-f" cx="50%" cy="48%" r="45%">
+      <stop offset="0%" stop-color="#39ff14" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#39ff14" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#39ff14" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb-f" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#8cffb7" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#39ff14" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="350" fill="#020208"/>
+
+  <!-- Ambient glow -->
+  <ellipse cx="250" cy="168" rx="190" ry="150" fill="url(#glow-f)"/>
+
+  <!-- Cannabis leaf — stylized -->
+  <g transform="translate(250,195)">
+    <!-- Central stem -->
+    <rect x="-2" y="-10" width="4" height="65" rx="2" fill="#39ff14" opacity="0.5"/>
+
+    <!-- Central leaf (top) -->
+    <path d="M0,-10 C-8,-30 -22,-58 -10,-88 C-4,-102 4,-102 10,-88 C22,-58 8,-30 0,-10Z"
+          fill="#39ff14" opacity="0.78"/>
+
+    <!-- Left inner leaf -->
+    <path d="M-2,-22 C-18,-26 -52,-16 -58,-42 C-62,-58 -46,-62 -32,-50 C-20,-40 -6,-28 -2,-22Z"
+          fill="#32d583" opacity="0.72"/>
+
+    <!-- Right inner leaf -->
+    <path d="M2,-22 C18,-26 52,-16 58,-42 C62,-58 46,-62 32,-50 C20,-40 6,-28 2,-22Z"
+          fill="#32d583" opacity="0.72"/>
+
+    <!-- Left outer leaf -->
+    <path d="M-4,-14 C-22,-8 -70,8 -80,-20 C-86,-38 -66,-46 -48,-34 C-34,-24 -12,-18 -4,-14Z"
+          fill="#1a9655" opacity="0.60"/>
+
+    <!-- Right outer leaf -->
+    <path d="M4,-14 C22,-8 70,8 80,-20 C86,-38 66,-46 48,-34 C34,-24 12,-18 4,-14Z"
+          fill="#1a9655" opacity="0.60"/>
+
+    <!-- Far left -->
+    <path d="M-6,-4 C-28,4 -82,24 -90,0 C-96,-18 -76,-28 -58,-20 C-42,-14 -16,-8 -6,-4Z"
+          fill="#1a9655" opacity="0.42"/>
+
+    <!-- Far right -->
+    <path d="M6,-4 C28,4 82,24 90,0 C96,-18 76,-28 58,-20 C42,-14 16,-8 6,-4Z"
+          fill="#1a9655" opacity="0.42"/>
+  </g>
+
+  <!-- Subtle circle frame -->
+  <circle cx="250" cy="175" r="105" fill="none" stroke="#39ff14" stroke-width="0.6" opacity="0.18"/>
+  <circle cx="250" cy="175" r="120" fill="none" stroke="#39ff14" stroke-width="0.3" opacity="0.10"/>
+
+  <!-- Label -->
+  <text x="250" y="325" text-anchor="middle"
+        fill="rgba(255,255,255,0.30)" font-family="Georgia,serif"
+        font-size="10" letter-spacing="6">FLEURS CBD</text>
+
+  <!-- Small diamond accent -->
+  <polygon points="250,302 256,308 250,314 244,308"
+           fill="none" stroke="#39ff14" stroke-width="0.8" opacity="0.35"/>
+</svg>

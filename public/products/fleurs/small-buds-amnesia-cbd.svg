@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Small Buds Amnesia CBD">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#193226" />
+      <stop offset="58%" stop-color="#0d1016" />
+      <stop offset="100%" stop-color="#050608" />
+    </linearGradient>
+    <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff2ab" />
+      <stop offset="100%" stop-color="#f2d34f" />
+    </linearGradient>
+    <filter id="blur-xl" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="70" />
+    </filter>
+    <filter id="blur-md" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="24" />
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="28" stdDeviation="36" flood-color="#000000" flood-opacity="0.42" />
+    </filter>
+  </defs>
+  
+  <rect width="800" height="800" fill="#090b10" />
+  <rect width="800" height="800" fill="url(#bg)" />
+  <ellipse cx="400" cy="180" rx="280" ry="100" fill="#ffd66e" opacity="0.16" filter="url(#blur-xl)" />
+  <ellipse cx="400" cy="690" rx="290" ry="70" fill="#000000" opacity="0.68" filter="url(#blur-md)" />
+  <rect x="44" y="44" width="712" height="712" rx="44" fill="none" stroke="rgba(255,255,255,0.08)" />
+
+  
+  <g filter="url(#shadow)">
+    
+  <g transform="translate(400 424) rotate(-8)">
+    <ellipse cx="0" cy="0" rx="114" ry="150" fill="#f2d34f" />
+    <ellipse cx="-8" cy="-6" rx="57" ry="81" fill="#193226" opacity="0.82" />
+    <ellipse cx="10" cy="6" rx="45" ry="69" fill="#f9d77a" opacity="0.22" />
+    <circle cx="-18" cy="-6" r="13.5" fill="#d46d38" opacity="0.72" />
+    <circle cx="9" cy="14" r="12" fill="#d46d38" opacity="0.64" />
+  </g>
+
+    
+  <g transform="translate(308 500) rotate(-38)">
+    <ellipse cx="0" cy="0" rx="85.12" ry="112" fill="#193226" />
+    <ellipse cx="-8" cy="-6" rx="42.56" ry="60.480000000000004" fill="#fff2ab" opacity="0.82" />
+    <ellipse cx="10" cy="6" rx="33.6" ry="51.52" fill="#f9d77a" opacity="0.22" />
+    <circle cx="-18" cy="-6" r="10.08" fill="#d46d38" opacity="0.72" />
+    <circle cx="9" cy="14" r="8.96" fill="#d46d38" opacity="0.64" />
+  </g>
+
+    
+  <g transform="translate(494 504) rotate(34)">
+    <ellipse cx="0" cy="0" rx="82.08" ry="108" fill="#193226" />
+    <ellipse cx="-8" cy="-6" rx="41.04" ry="58.32000000000001" fill="#fff2ab" opacity="0.82" />
+    <ellipse cx="10" cy="6" rx="32.4" ry="49.68" fill="#f9d77a" opacity="0.22" />
+    <circle cx="-18" cy="-6" r="9.719999999999999" fill="#d46d38" opacity="0.72" />
+    <circle cx="9" cy="14" r="8.64" fill="#d46d38" opacity="0.64" />
+  </g>
+
+    
+  <g transform="translate(390 580) rotate(0)">
+    <ellipse cx="0" cy="0" rx="66.88" ry="88" fill="#f2d34f" />
+    <ellipse cx="-8" cy="-6" rx="33.44" ry="47.52" fill="#193226" opacity="0.82" />
+    <ellipse cx="10" cy="6" rx="26.4" ry="40.480000000000004" fill="#f9d77a" opacity="0.22" />
+    <circle cx="-18" cy="-6" r="7.92" fill="#d46d38" opacity="0.72" />
+    <circle cx="9" cy="14" r="7.04" fill="#d46d38" opacity="0.64" />
+  </g>
+
+    <g opacity="0.9">
+      <circle cx="410" cy="360" r="6" fill="#ffffff" opacity="0.8" />
+      <circle cx="446" cy="412" r="5" fill="#ffffff" opacity="0.7" />
+      <circle cx="332" cy="472" r="4" fill="#ffffff" opacity="0.65" />
+      <circle cx="486" cy="506" r="4" fill="#ffffff" opacity="0.72" />
+      <circle cx="370" cy="566" r="5" fill="#ffffff" opacity="0.72" />
+    </g>
+  </g>
+
+</svg>

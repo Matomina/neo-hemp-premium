@@ -10,18 +10,20 @@ type HeaderProps = {
 };
 
 const navItems = [
-  { path: '/boutique', label: 'Produits' },
-  { path: '/categorie/fleurs', label: 'Fleurs' },
-  { path: '/categorie/resines', label: 'Résines' },
-  { path: '/a-propos', label: 'À propos' },
-  { path: '/guide-cbd-legal', label: 'Guide' },
-  { path: '/forum-live', label: 'Forum live' },
-  { path: '/contact', label: 'Contact' },
+  { path: '/boutique',                  label: 'Boutique' },
+  { path: '/categorie/fleurs',          label: 'Fleurs' },
+  { path: '/categorie/resines',         label: 'Résines' },
+  { path: '/categorie/cosmetiques',     label: 'Cosmétiques' },
+  { path: '/categorie/accessoires',     label: 'Accessoires' },
+  { path: '/guide-cbd-legal',           label: 'Guide CBD' },
+  { path: '/a-propos',                  label: 'À propos' },
 ];
 
 const categoryPathMap: Partial<Record<string, CategorySlug>> = {
-  '/categorie/fleurs': 'fleurs',
-  '/categorie/resines': 'resines',
+  '/categorie/fleurs':      'fleurs',
+  '/categorie/resines':     'resines',
+  '/categorie/huiles':      'huiles',
+  '/categorie/eliquides':   'eliquides',
   '/categorie/cosmetiques': 'cosmetiques',
   '/categorie/accessoires': 'accessoires',
 };
@@ -37,29 +39,43 @@ export function Header({ cartCount, currentPath, onNavigate, onCategorySelect }:
     setIsMenuOpen(false);
   };
 
+  const isActive = (path: string) => {
+    if (path === '/boutique') return currentPath === path;
+    return currentPath === path || currentPath.startsWith(path);
+  };
+
   return (
     <header className="site-header">
       <div className="topbar">
-        <span>Culture Bio Diamant</span>
-        <span>100% naturel premium</span>
-        <span>Contrôlé & certifié</span>
-        <span>Univers noir néon</span>
+        <div className="topbar-inner">
+          <span>PRODUITS CONTRÔLÉS</span>
+          <span className="topbar-sep" aria-hidden="true">•</span>
+          <span>THC ≤ 0,30% CONFORME</span>
+          <span className="topbar-sep" aria-hidden="true">•</span>
+          <span>LIVRAISON SUIVIE</span>
+          <span className="topbar-sep topbar-hide-sm" aria-hidden="true">•</span>
+          <span className="topbar-hide-sm">ANALYSES LABORATOIRE</span>
+        </div>
+        <span className="topbar-service">Service client responsable</span>
       </div>
 
       <nav className="navbar container" aria-label="Navigation principale">
-        <button className="brand" onClick={() => goTo('/')} aria-label="Retour à l’accueil Culture Bio Diamant">
-          <span className="brand-mark" aria-hidden="true">CBD</span>
+        <button type="button" className="brand" onClick={() => goTo('/')} aria-label="Accueil Culture Bio Diamant">
+          <span className="brand-logo-frame" aria-hidden="true">
+            <img src="/cbd-logo.jpeg" alt="" className="brand-logo-img" />
+          </span>
           <span className="brand-copy">
             <strong>Culture Bio Diamant</strong>
-            <small>Premium Naturel</small>
+            <small>CBD Premium Naturel</small>
           </span>
         </button>
 
         <div className="nav-links" aria-label="Liens principaux">
           {navItems.map((item) => (
             <button
+              type="button"
               key={item.path}
-              className={currentPath === item.path ? 'active' : ''}
+              className={isActive(item.path) ? 'active' : ''}
               onClick={() => goTo(item.path)}
             >
               {item.label}
@@ -68,21 +84,25 @@ export function Header({ cartCount, currentPath, onNavigate, onCategorySelect }:
         </div>
 
         <div className="nav-actions">
-          <button onClick={() => goTo('/boutique')} aria-label="Rechercher dans la boutique">
-            <Search size={20} />
+          <button type="button" className="nav-action-btn" onClick={() => goTo('/boutique')} aria-label="Rechercher">
+            <Search size={17} />
           </button>
-          <button onClick={() => goTo('/connexion')} aria-label="Connexion client">
-            <UserRound size={20} />
+          <button type="button" className="nav-action-btn" onClick={() => goTo('/connexion')} aria-label="Compte">
+            <UserRound size={17} />
           </button>
-          <button className="cart-button" onClick={() => goTo('/panier')} aria-label="Voir le panier">
-            <ShoppingBag size={20} />
-            <span>{cartCount}</span>
+          <button type="button" className="cart-button nav-action-btn" onClick={() => goTo('/panier')} aria-label="Panier">
+            <ShoppingBag size={17} />
+            {cartCount > 0 ? <span>{cartCount}</span> : null}
+          </button>
+          <button type="button" className="cta-header" onClick={() => goTo('/boutique')}>
+            Voir la boutique
           </button>
           <button
+            type="button"
             className="mobile-menu"
             aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             aria-expanded={isMenuOpen}
-            onClick={() => setIsMenuOpen((value) => !value)}
+            onClick={() => setIsMenuOpen((v) => !v)}
           >
             {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -92,14 +112,14 @@ export function Header({ cartCount, currentPath, onNavigate, onCategorySelect }:
       {isMenuOpen ? (
         <div className="mobile-panel container">
           {navItems.map((item) => (
-            <button key={item.path} onClick={() => goTo(item.path)}>
+            <button type="button" key={item.path} onClick={() => goTo(item.path)}>
               {item.label}
             </button>
           ))}
-          <button onClick={() => goTo('/categorie/cosmetiques')}>Cosmétiques</button>
-          <button onClick={() => goTo('/categorie/accessoires')}>Accessoires</button>
-          <button onClick={() => goTo('/certificats-tracabilite')}>Certificats</button>
-          <button onClick={() => goTo('/mentions-legales')}>Mentions légales</button>
+          <button type="button" onClick={() => goTo('/categorie/huiles')}>Huiles CBD</button>
+          <button type="button" onClick={() => goTo('/categorie/eliquides')}>E-Liquides CBD</button>
+          <button type="button" onClick={() => goTo('/contact')}>Contact</button>
+          <button type="button" onClick={() => goTo('/mentions-legales')}>Mentions légales</button>
         </div>
       ) : null}
     </header>

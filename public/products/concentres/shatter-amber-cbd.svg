@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Shatter Amber CBD">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#20191f" />
+      <stop offset="58%" stop-color="#0d1016" />
+      <stop offset="100%" stop-color="#050608" />
+    </linearGradient>
+    <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eae6ff" />
+      <stop offset="100%" stop-color="#f6bf4e" />
+    </linearGradient>
+    <filter id="blur-xl" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="70" />
+    </filter>
+    <filter id="blur-md" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="24" />
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="28" stdDeviation="36" flood-color="#000000" flood-opacity="0.42" />
+    </filter>
+  </defs>
+  
+  <rect width="800" height="800" fill="#090b10" />
+  <rect width="800" height="800" fill="url(#bg)" />
+  <ellipse cx="400" cy="180" rx="280" ry="100" fill="#9de8ff" opacity="0.16" filter="url(#blur-xl)" />
+  <ellipse cx="400" cy="690" rx="290" ry="70" fill="#000000" opacity="0.68" filter="url(#blur-md)" />
+  <rect x="44" y="44" width="712" height="712" rx="44" fill="none" stroke="rgba(255,255,255,0.08)" />
+
+  
+      <g filter="url(#shadow)">
+        <path d="M312 566 L270 470 L334 350 L418 384 L446 512 L384 606 Z" fill="#eae6ff" />
+        <path d="M448 548 L420 424 L504 344 L570 440 L534 582 Z" fill="#f6bf4e" />
+        <path d="M336 352 L414 388 L504 344 L430 320 Z" fill="#ffffff" opacity="0.32" />
+        <path d="M308 564 L382 606 L450 548 L420 510 Z" fill="#9de8ff" opacity="0.28" />
+      </g>
+    
+</svg>

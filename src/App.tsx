@@ -1,28 +1,27 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, BadgeCheck, Boxes, CheckCircle2, CreditCard, FileText, Gem, Leaf, LockKeyhole, MessageCircle, PackageCheck, ShieldCheck, Sparkles, Truck, UserRound } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Boxes, CheckCircle2, CreditCard, FileText, Gem, LockKeyhole, MessageCircle, PackageCheck, ShieldCheck, Truck, UserRound } from 'lucide-react';
 import { Header } from './components/Header';
 import { ProductCard } from './components/ProductCard';
 import { SectionTitle } from './components/SectionTitle';
 import { Footer } from './components/Footer';
-import { categoryDescriptions, categoryLabels, products } from './data/products';
-import { aboutBlocks, flyerInsights, homepageStory, legalBlocks, liveForumPosts, premiumValues } from './data/siteContent';
+import { categoryDescriptions, categoryLabels, categoryPreviewImages, products } from './data/products';
+import { aboutBlocks, legalBlocks, liveForumPosts, premiumValues } from './data/siteContent';
 import type { CartItem, CategorySlug, Product } from './types';
-import visualMockup from './assets/maquette-boutique-cbd-visuelle.png';
 
 const ACCESS_KEY = 'culture-bio-diamant-majorite-ok';
 
-const trustItems = [
-  { icon: ShieldCheck, label: 'Contrôlé & certifié' },
-  { icon: FileText, label: 'Lots et analyses visibles' },
-  { icon: Truck, label: 'Livraison suivie' },
-  { icon: LockKeyhole, label: 'Paiement sécurisé à valider' },
+const homeCategoryCards = [
+  { slug: 'fleurs'      as CategorySlug, title: 'Fleurs CBD',       desc: 'Fleurs indoor sélectionnées, taux CBD vérifié par lot, certificats disponibles.' },
+  { slug: 'resines'     as CategorySlug, title: 'Résines CBD',      desc: 'Résines CBD documentées, extraction mécanique, origine et lot traçables.' },
+  { slug: 'cosmetiques' as CategorySlug, title: 'Cosmétiques CBD',  desc: 'Soins dermo-cosmétiques au CBD, formulés avec exigence et dossier fournisseur.' },
+  { slug: 'accessoires' as CategorySlug, title: 'Accessoires',      desc: 'Accessoires sélectionnés pour une expérience optimale, sans substance active.' },
 ];
 
-const categoryCards: Array<{ slug: CategorySlug; text: string }> = [
-  { slug: 'fleurs', text: 'Fleurs premium mockées pour présenter taux, origine, lot et certificat.' },
-  { slug: 'resines', text: 'Résines sélectionnées avec logique de preuve et fiches produit détaillées.' },
-  { slug: 'cosmetiques', text: 'Cosmétiques au chanvre à publier uniquement avec dossier fournisseur complet.' },
-  { slug: 'accessoires', text: 'Accessoires élégants pour enrichir le panier sans ajouter de risque produit.' },
+const reassuranceItems = [
+  { icon: BadgeCheck,     title: 'Sélection vérifiée',           text: 'Fournisseurs audités et produits rigoureusement sélectionnés.' },
+  { icon: FileText,       title: 'Analyses par lot',             text: 'Chaque lot a été analysé en laboratoire pour garantir conformité et qualité.' },
+  { icon: Boxes,          title: 'Catalogue maîtrisé',           text: 'Une gamme courte et maîtrisée pour garantir traçabilité et fiabilité.' },
+  { icon: MessageCircle,  title: 'Communication responsable',    text: 'Aucune promesse médicale. Informations claires et transparentes.' },
 ];
 
 function App() {
@@ -37,6 +36,31 @@ function App() {
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
+
+  useEffect(() => {
+    const SELECTOR = '.product-card, .cat-card-4, .reassurance-item, .category-card, .section-title';
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          const siblings = Array.from(el.parentElement?.querySelectorAll(SELECTOR) ?? []);
+          const idx = Math.min(siblings.indexOf(el), 8);
+          el.style.transitionDelay = `${idx * 0.07}s`;
+          el.classList.add('in-view');
+          setTimeout(() => { el.style.transitionDelay = '0s'; }, 900 + idx * 70);
+          observer.unobserve(el);
+        });
+      },
+      { threshold: 0.06, rootMargin: '0px 0px -24px 0px' }
+    );
+    const timer = setTimeout(() => {
+      document.querySelectorAll(SELECTOR).forEach((el) => {
+        if (!el.classList.contains('in-view')) observer.observe(el);
+      });
+    }, 16);
+    return () => { clearTimeout(timer); observer.disconnect(); };
+  }, [currentPath, activeCategory]);
 
   const filteredProducts = useMemo(() => {
     if (activeCategory === 'all') return products;
@@ -62,11 +86,11 @@ function App() {
     });
   };
 
-  const removeFromCart = (productId: number) => {
+  const removeFromCart = (productId: string) => {
     setCart((current) => current.filter((item) => item.id !== productId));
   };
 
-  const changeQuantity = (productId: number, direction: 'up' | 'down') => {
+  const changeQuantity = (productId: string, direction: 'up' | 'down') => {
     setCart((current) => current.flatMap((item) => {
       if (item.id !== productId) return [item];
       const nextQuantity = direction === 'up' ? item.quantity + 1 : item.quantity - 1;
@@ -90,96 +114,275 @@ function App() {
   const legalPage = legalBlocks.find((page) => page.path === currentPath);
 
   const renderHome = () => (
-    <>
-      <section className="hero-section neon-hero">
-        <div className="container hero-grid">
-          <div className="hero-copy">
-            <span className="eyebrow"><Sparkles size={16} /> Culture Bio Diamant • Premium Naturel</span>
-            <h1>CBD premium, noir profond, éclat vert diamant.</h1>
-            <p>
-              Le flyer impose une identité forte : une feuille lumineuse, un diamant, un laboratoire, une promesse naturelle et un univers noir/vert fluo. Le site reprend cette direction pour raconter une marque élégante, rassurante et structurée autour de la qualité.
+    <div className="home-split">
+
+      {/* PANNEAU GAUCHE */}
+      <div className="home-left">
+
+        {/* ── HERO ── */}
+        <section className="hero-main">
+          <div className="hero-main-content">
+            <span className="hero-eyebrow"><ShieldCheck size={13} /> CBD Premium • Sélection rigoureuse</span>
+            <h1 className="hero-headline">
+              CBD premium,<br />
+              sélectionné avec<br />
+              <span className="hero-accent">exigence.</span>
+            </h1>
+            <p className="hero-sub">
+              Des produits à base de chanvre, contrôlés,<br />
+              traçables et conformes à la réglementation.
             </p>
-            <div className="hero-actions">
-              <button className="primary-button" onClick={() => navigate('/boutique')}>Découvrir les produits <ArrowRight size={18} /></button>
-              <button className="ghost-button" onClick={() => navigate('/a-propos')}>Comprendre la marque</button>
-            </div>
-            <div className="hero-proof">
-              <span><CheckCircle2 size={17} /> 100% naturel premium</span>
-              <span><CheckCircle2 size={17} /> Qualité diamant</span>
-              <span><CheckCircle2 size={17} /> Contrôle laboratoire</span>
+            <div className="hero-ctas">
+              <button type="button" className="primary-button" onClick={() => navigate('/boutique')}>
+                Découvrir la boutique <ArrowRight size={14} />
+              </button>
+              <button type="button" className="ghost-button" onClick={() => navigate('/guide-cbd-legal')}>
+                Comprendre le CBD légal
+              </button>
             </div>
           </div>
 
-          <div className="hero-visual-card">
-            <img src={visualMockup} alt="Univers visuel Culture Bio Diamant noir premium et vert néon" />
-            <div className="diamond-glow" aria-hidden="true"><Gem size={92} /></div>
-            <div className="floating-card top"><BadgeCheck size={18} /> Contrôlé & certifié</div>
-            <div className="floating-card bottom"><PackageCheck size={18} /> Premium Naturel</div>
+          <div className="hero-product-visual">
+            <img
+              src="/generated-sheets/hero-photoreal.png"
+              alt="Sélection premium de produits CBD en photographie studio"
+              className="hero-flyer-img"
+            />
+            <div className="hero-product-glow" aria-hidden="true" />
+            <div className="hero-float-badge top">
+              <BadgeCheck size={12} /> Premium — Lot traçable
+            </div>
+            <div className="hero-float-badge bottom">
+              <PackageCheck size={12} /> THC &lt; 0,30%
+            </div>
           </div>
+        </section>
+
+        {/* ── TRUST BADGES ── */}
+        <div className="trust-badges-row">
+          <span className="trust-badge"><ShieldCheck size={11} /> THC &lt; 0,30% conforme</span>
+          <span className="trust-badge"><FileText size={11} /> Analyses disponibles</span>
+          <span className="trust-badge"><Truck size={11} /> Livraison suivie</span>
+          <span className="trust-badge"><LockKeyhole size={11} /> Paiement sécurisé</span>
         </div>
-      </section>
 
-      <section className="trust-strip container">
-        {trustItems.map(({ icon: Icon, label }) => (
-          <div key={label}><Icon size={22} /><span>{label}</span></div>
-        ))}
-      </section>
+        {/* ── CATÉGORIES ── */}
+        <section>
+          <span className="home-section-label">Catalogue premium</span>
+          <div className="cat-grid-4">
+            {homeCategoryCards.map((cat) => (
+              <button
+                key={cat.slug}
+                type="button"
+                className="cat-card-4"
+                onClick={() => { setActiveCategory(cat.slug); navigate(`/categorie/${cat.slug}`); }}
+              >
+                <img
+                  src={categoryPreviewImages[cat.slug]}
+                  alt=""
+                  aria-hidden="true"
+                  className="cat-card-4-img"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    const preview = categoryPreviewImages[cat.slug];
+                    const fb = `/products/${cat.slug}/fallback.svg`;
+                    if (img.src !== preview) {
+                      img.src = preview;
+                      return;
+                    }
+                    if (img.src !== fb) img.src = fb;
+                  }}
+                />
+                <div className="cat-card-4-overlay" aria-hidden="true" />
+                <div className="cat-card-4-body">
+                  <div className="cat-card-4-title">{cat.title}</div>
+                  <div className="cat-card-4-desc">{cat.desc}</div>
+                  <span className="cat-card-4-cta">Explorer <ArrowRight size={10} /></span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
 
-      <section className="section container">
-        <SectionTitle eyebrow="Analyse du flyer" title="Une identité naturelle, lumineuse et premium" text="Le site doit développer le message du flyer : pas seulement vendre des produits, mais expliquer une méthode, une exigence et une expérience de marque." />
-        <div className="info-grid">
-          {flyerInsights.map((item) => (
-            <article className="quality-card" key={item.title}>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </article>
+        {/* ── RÉASSURANCE ── */}
+        <section>
+          <div className="reassurance-grid">
+            {reassuranceItems.map(({ icon: Icon, title, text }) => (
+              <div key={title} className="reassurance-item">
+                <div className="reassurance-icon"><Icon size={17} /></div>
+                <div className="reassurance-text">
+                  <h4>{title}</h4>
+                  <p>{text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── BEST-SELLERS TEASER ── */}
+        <div className="bestsellers-teaser">
+          <div>
+            <span className="bestsellers-teaser-eyebrow">Best-sellers</span>
+            <h3>Nos produits les plus appréciés</h3>
+          </div>
+          <button type="button" className="ghost-button" onClick={() => navigate('/boutique')}>
+            Voir tout <ArrowRight size={14} />
+          </button>
+        </div>
+
+      </div>
+
+      {/* PANNEAU DROIT - BOUTIQUE */}
+      <div className="home-right">
+
+        <h2 className="boutique-panel-title">Boutique CBD</h2>
+        <p className="boutique-panel-sub">
+          Sélection de produits à base de chanvre conformes, traçables et documentés.
+        </p>
+
+        {/* Filtres */}
+        <div className="boutique-filters">
+          {['Catégorie', 'Type', 'THC', 'Prix', 'Popularité'].map((label) => (
+            <select key={label} className="boutique-filter-select" aria-label={label}>
+              <option>{label}</option>
+            </select>
           ))}
         </div>
-      </section>
 
-      <section className="section guide-section">
-        <div className="container guide-grid">
-          <div>
-            <SectionTitle eyebrow="Notre promesse" title="Du contenu clair avant la vente" text="Une page d’accueil premium doit rassurer : expliquer la sélection, montrer les preuves, présenter les catégories et donner envie d’entrer dans l’univers Culture Bio Diamant." />
-            <div className="guide-points">
-              {homepageStory.map((item) => (
-                <p key={item.title}><Gem /> <span><strong>{item.title}</strong><br />{item.text}</span></p>
-              ))}
-            </div>
-          </div>
-          <div className="quality-card">
-            <h3>Pourquoi “Diamant” ?</h3>
-            <p>Parce que le diamant évoque la sélection, la précision et la lumière. La boutique doit rester courte, propre, très lisible, avec des produits bien présentés plutôt qu’un catalogue dispersé.</p>
-            <button className="ghost-button" onClick={() => navigate('/certificats-tracabilite')}>Voir la traçabilité</button>
-          </div>
-        </div>
-      </section>
-
-      <section className="section container">
-        <SectionTitle eyebrow="Catalogue premium" title="Des catégories lisibles et mieux expliquées" text="Chaque catégorie garde le style flyer : noir intense, vert fluo, bordure diamant, texte naturel et présentation haut de gamme." />
-        <div className="category-grid">
-          {categoryCards.map((category) => (
-            <button key={category.slug} className="category-card" onClick={() => { setActiveCategory(category.slug); navigate(`/categorie/${category.slug}`); }}>
-              <Leaf size={26} />
-              <h3>{categoryLabels[category.slug]}</h3>
-              <p>{category.text}</p>
-              <span>Explorer <ArrowRight size={15} /></span>
+        {/* Grille compacte */}
+        <div className="boutique-product-grid">
+          {products.slice(0, 5).map((product) => (
+            <button
+              key={product.id}
+              type="button"
+              className={`product-card-sm${selectedProduct.id === product.id ? ' product-card-sm--active' : ''}`}
+              onClick={() => setSelectedProduct(product)}
+            >
+              <div className="product-card-sm-img-wrap">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="product-card-sm-img"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    const preview = categoryPreviewImages[product.category];
+                    const fb = `/products/${product.category}/fallback.svg`;
+                    if (img.src !== preview) {
+                      img.src = preview;
+                      return;
+                    }
+                    if (img.src !== fb) img.src = fb;
+                  }}
+                />
+              </div>
+              <div className="product-card-sm-body">
+                <div className="product-card-sm-cat">{categoryLabels[product.category]}</div>
+                <div className="product-card-sm-name">{product.name}</div>
+                <div className="product-card-sm-rates">
+                  {product.cbdRate ? `CBD ${product.cbdRate} · ` : ''}THC {product.thcRate}
+                </div>
+                <div className="product-card-sm-footer">
+                  <span className="product-card-sm-price">
+                    {product.price != null ? `${product.price.toFixed(2).replace('.', ',')} €` : '—'}
+                  </span>
+                  <button
+                    type="button"
+                    className="product-card-sm-add"
+                    aria-label={`Ajouter ${product.name}`}
+                    onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                  >+</button>
+                </div>
+              </div>
             </button>
           ))}
         </div>
-      </section>
 
-      <section className="section boutique-section">
-        <div className="container">
-          <SectionTitle eyebrow="Produits en avant" title="Cartes produits glow diamant" text="La V1 contient des produits mockés pour valider la structure : nom, catégorie, taux, lot, origine, précautions, certificat et panier." />
-          <div className="product-grid">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} onAdd={addToCart} onView={viewProduct} />
+        {/* Produit vedette */}
+        <div className="boutique-featured">
+          <div className="boutique-featured-top">
+            <div className="boutique-featured-img-wrap">
+              <img
+                src={selectedProduct.image}
+                alt={selectedProduct.name}
+                className="boutique-featured-img"
+                onError={(e) => {
+                  const img = e.currentTarget;
+                  const preview = categoryPreviewImages[selectedProduct.category];
+                  const fb = `/products/${selectedProduct.category}/fallback.svg`;
+                  if (img.src !== preview) {
+                    img.src = preview;
+                    return;
+                  }
+                  if (img.src !== fb) img.src = fb;
+                }}
+              />
+              <div className="boutique-featured-img-glow" aria-hidden="true" />
+            </div>
+            <div className="boutique-featured-info">
+              <span className="boutique-featured-eyebrow">{categoryLabels[selectedProduct.category]}</span>
+              <div className="boutique-featured-name">{selectedProduct.name}</div>
+              <div className="boutique-featured-desc">{selectedProduct.shortDescription}</div>
+              <div className="boutique-featured-price">
+                {selectedProduct.price != null ? `${selectedProduct.price.toFixed(2).replace('.', ',')} €` : '—'}
+              </div>
+              <div className="boutique-featured-stock">● En stock</div>
+              <div className="boutique-featured-actions">
+                <button type="button" className="boutique-featured-add" onClick={() => addToCart(selectedProduct)}>
+                  + Ajouter au panier
+                </button>
+                <button type="button" className="boutique-featured-wish" aria-label="Favoris">♡</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="boutique-featured-badges">
+            <span className="boutique-featured-badge">Livraison 24/48h</span>
+            <span className="boutique-featured-badge">Paiement sécurisé</span>
+            <span className="boutique-featured-badge">Retours faciles</span>
+          </div>
+
+          <div className="boutique-featured-tabs">
+            {['Description', 'Caractéristiques', 'Analyses', 'Avis (0)'].map((tab, i) => (
+              <button key={tab} type="button" className={`boutique-featured-tab${i === 0 ? ' active' : ''}`}>
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          <div className="boutique-featured-cert">
+            <div className="boutique-cert-specs">
+              <div className="boutique-cert-spec"><CheckCircle2 size={10} /> CBD {selectedProduct.cbdRate ?? '—'}</div>
+              <div className="boutique-cert-spec"><CheckCircle2 size={10} /> THC {selectedProduct.thcRate ?? selectedProduct.thc ?? '< 0,3%'}</div>
+              <div className="boutique-cert-spec"><CheckCircle2 size={10} /> Lot : {selectedProduct.lot ?? '—'}</div>
+              <div className="boutique-cert-spec"><CheckCircle2 size={10} /> {selectedProduct.origin ?? 'Chanvre UE'}</div>
+            </div>
+            {selectedProduct.certificateAvailable
+              ? <button type="button" className="boutique-cert-btn">Voir le certificat</button>
+              : null}
+          </div>
+        </div>
+
+        {/* Barre stats confiance */}
+        <div className="trust-stats-bar">
+          <div className="trust-stats-title">Transparence. Confiance. Conformité.</div>
+          <div className="trust-stats-grid">
+            {[
+              { icon: Gem,          value: '+120', label: 'Produits\nsélectionnés' },
+              { icon: FileText,     value: '+100', label: 'Analyses\ndisponibles' },
+              { icon: ShieldCheck,  value: '0%',   label: 'THC au-delà\nde la limite légale' },
+              { icon: CheckCircle2, value: '100%', label: 'Engagement\nresponsable' },
+            ].map(({ icon: Icon, value, label }) => (
+              <div key={label} className="trust-stat-item">
+                <div className="trust-stat-icon"><Icon size={13} /></div>
+                <span className="trust-stat-value">{value}</span>
+                <span className="trust-stat-label">{label}</span>
+              </div>
             ))}
           </div>
         </div>
-      </section>
-    </>
+
+      </div>
+    </div>
   );
 
   const renderShop = () => (
@@ -216,28 +419,43 @@ function App() {
     <section className="section container product-detail-section page-section">
       <SectionTitle eyebrow={categoryLabels[visibleProduct.category]} title={visibleProduct.name} text={visibleProduct.description} />
       <div className="product-detail">
-        <div className={`detail-visual ${visibleProduct.imageTone}`}>
+        <div className={`detail-visual ${visibleProduct.imageTone ?? 'emerald'}`}>
+          <img
+            src={visibleProduct.image}
+            alt={visibleProduct.imageAlt ?? visibleProduct.name}
+            className="detail-img"
+            loading="lazy"
+            onError={(e) => {
+              const img = e.currentTarget;
+              const preview = categoryPreviewImages[visibleProduct.category];
+              const fb = `/products/${visibleProduct.category}/fallback.svg`;
+              if (img.src !== preview) {
+                img.src = preview;
+                return;
+              }
+              if (img.src !== fb) img.src = fb;
+            }}
+          />
           <span className="product-orb" />
           <span className="diamond-frame" />
-          <span className="detail-pack">{visibleProduct.name}</span>
         </div>
         <div className="detail-content">
-          <span className="eyebrow">Lot {visibleProduct.lot}</span>
+          <span className="eyebrow">Lot {visibleProduct.lot ?? '—'}</span>
           <h2>{visibleProduct.name}</h2>
-          <p>{visibleProduct.details}</p>
+          <p>{visibleProduct.details ?? visibleProduct.description}</p>
           <div className="detail-specs">
             <span>Catégorie : {categoryLabels[visibleProduct.category]}</span>
             <span>CBD : {visibleProduct.cbdRate ?? 'Selon fiche produit'}</span>
-            <span>THC : {visibleProduct.thcRate}</span>
-            <span>Origine : {visibleProduct.origin}</span>
-            <span>Lot : {visibleProduct.lot}</span>
+            <span>THC : {visibleProduct.thcRate ?? visibleProduct.thc ?? '< 0,3%'}</span>
+            <span>Origine : {visibleProduct.origin ?? 'Chanvre UE'}</span>
+            <span>Lot : {visibleProduct.lot ?? '—'}</span>
             <span>Certificat : {visibleProduct.certificateAvailable ? 'Disponible' : 'À compléter'}</span>
           </div>
           <div className="tabs-preview">
             <button>Description</button><button>Analyse / certificat</button><button>Composition</button><button>Précautions</button>
           </div>
-          <p className="compliance-box"><strong>Composition :</strong> {visibleProduct.composition}</p>
-          <p className="compliance-box"><strong>Précautions :</strong> {visibleProduct.precautions}</p>
+          {(visibleProduct.composition ?? visibleProduct.complianceNote) ? <p className="compliance-box"><strong>Composition :</strong> {visibleProduct.composition ?? visibleProduct.complianceNote}</p> : null}
+          {(visibleProduct.precautions ?? visibleProduct.usageNote) ? <p className="compliance-box"><strong>Précautions :</strong> {visibleProduct.precautions ?? visibleProduct.usageNote}</p> : null}
           <button className="primary-button" onClick={() => addToCart(visibleProduct)}>Ajouter au panier — {visibleProduct.price.toFixed(2).replace('.', ',')} €</button>
         </div>
       </div>
@@ -248,7 +466,7 @@ function App() {
     <section className="section container cart-checkout-grid page-section">
       <div className="cart-panel">
         <SectionTitle eyebrow="Panier" title="Résumé de commande premium" text="Le panier doit rassurer : produits clairs, quantités lisibles, total estimé, rappel de la conformité et tunnel simple." />
-        {cart.length === 0 ? <p className="empty-cart">Ton panier est vide. Ajoute un produit pour tester le parcours d’achat de la maquette.</p> : cart.map((item) => (
+        {cart.length === 0 ? <p className="empty-cart">Ton panier est vide. Ajoute un produit pour tester le parcours d'achat de la maquette.</p> : cart.map((item) => (
           <div className="cart-row" key={item.id}>
             <span>{item.name} × {item.quantity}</span>
             <strong>{(item.price * item.quantity).toFixed(2).replace('.', ',')} €</strong>
@@ -269,7 +487,7 @@ function App() {
           <input placeholder="Email" />
           <input placeholder="Nom et prénom" />
           <input placeholder="Adresse de livraison" />
-          <label><input type="checkbox" /> J’accepte les conditions d’utilisation et les CGV</label>
+          <label><input type="checkbox" /> J'accepte les conditions d'utilisation et les CGV</label>
           <label><input type="checkbox" /> Je confirme être majeur</label>
           <button type="button" className="primary-button" onClick={() => navigate('/confirmation')}>Simuler la validation</button>
         </form>
@@ -279,7 +497,7 @@ function App() {
 
   const renderAbout = () => (
     <section className="section container page-section">
-      <SectionTitle eyebrow="À propos" title="Une marque naturelle, moderne et premium" text="Culture Bio Diamant reprend l’énergie du flyer : un univers végétal lumineux, une exigence de contrôle et une présentation haut de gamme." />
+      <SectionTitle eyebrow="À propos" title="Une marque naturelle, moderne et premium" text="Culture Bio Diamant reprend l'énergie du flyer : un univers végétal lumineux, une exigence de contrôle et une présentation haut de gamme." />
       <div className="info-grid">
         {aboutBlocks.map((block) => (
           <article className="quality-card" key={block.title}>
@@ -306,7 +524,7 @@ function App() {
 
   const renderForum = () => (
     <section className="section container page-section">
-      <SectionTitle eyebrow="Forum live" title="Espace communauté simulé" text="La V1 prévoit un espace de discussion premium pour annonces, questions clients et réponses support. Aucun message n’est envoyé en production dans cette maquette." />
+      <SectionTitle eyebrow="Forum live" title="Espace communauté simulé" text="La V1 prévoit un espace de discussion premium pour annonces, questions clients et réponses support. Aucun message n'est envoyé en production dans cette maquette." />
       <div className="guide-grid">
         <div className="contact-form">
           <h3>Lancer une discussion</h3>
@@ -341,7 +559,7 @@ function App() {
         <div className="quality-card">
           <UserRound size={34} />
           <h3>Compte client à venir</h3>
-          <p>La V1 prépare les écrans. Le backend devra ensuite gérer l’authentification, les commandes, les adresses et la sécurité des données.</p>
+          <p>La V1 prépare les écrans. Le backend devra ensuite gérer l'authentification, les commandes, les adresses et la sécurité des données.</p>
         </div>
       </div>
     </section>
@@ -356,7 +574,7 @@ function App() {
           {legalPage.points.map((point) => (
             <div className="quality-card" key={point}>
               <h3>{point}</h3>
-              <p>Information à finaliser avec les données réelles de l’entreprise avant publication officielle.</p>
+              <p>Information à finaliser avec les données réelles de l'entreprise avant publication officielle.</p>
             </div>
           ))}
         </div>
@@ -372,11 +590,11 @@ function App() {
 
     const content = {
       '/guide-cbd-legal': ['Guide CBD légal', 'CBD, THC et achat responsable', 'Le guide explique les notions essentielles avec un ton naturel, premium et prudent. Il doit aider le client à comprendre la sélection sans promesse médicale.'],
-      '/certificats-tracabilite': ['Certificats & traçabilité', 'Lots suivis et analyses visibles', 'Chaque produit réel devra être relié à un certificat d’analyse, une fiche fournisseur, un lot et des précautions clairement lisibles.'],
+      '/certificats-tracabilite': ['Certificats & traçabilité', 'Lots suivis et analyses visibles', "Chaque produit réel devra être relié à un certificat d'analyse, une fiche fournisseur, un lot et des précautions clairement lisibles."],
       '/faq': ['FAQ', 'Questions fréquentes', 'Retrouve les informations essentielles sur la sélection, la livraison, le panier, les certificats et le futur compte client.'],
-      '/contact': ['Contact', 'Support client', 'Formulaire visuel pour la V1. Aucun message n’est envoyé tant que le backend n’est pas intégré.'],
-      '/livraison-retours': ['Livraison & retours', 'Service client', 'Livraison suivie, retours et SAV devront être finalisés avec les vraies informations d’entreprise.'],
-      '/confirmation': ['Confirmation', 'Commande simulée reçue', 'Numéro fictif : CBD-2606-001. Aucun paiement réel n’a été déclenché.'],
+      '/contact': ['Contact', 'Support client', "Formulaire visuel pour la V1. Aucun message n'est envoyé tant que le backend n'est pas intégré."],
+      '/livraison-retours': ['Livraison & retours', 'Service client', "Livraison suivie, retours et SAV devront être finalisés avec les vraies informations d'entreprise."],
+      '/confirmation': ['Confirmation', 'Commande simulée reçue', "Numéro fictif : CBD-2606-001. Aucun paiement réel n'a été déclenché."],
     }[currentPath] ?? ['Page', 'Culture Bio Diamant', 'Contenu placeholder à compléter.'];
 
     return (
@@ -414,7 +632,7 @@ function App() {
             <div className="age-gate-mark"><Gem size={34} /><span>CBD</span></div>
             <p className="eyebrow"><ShieldCheck size={16} /> Accès responsable</p>
             <h2>Culture Bio Diamant</h2>
-            <p>Confirme que tu es majeur pour consulter cette boutique à base de chanvre et d’accessoires premium.</p>
+            <p>Confirme que tu es majeur pour consulter cette boutique à base de chanvre et d'accessoires premium.</p>
             <button className="primary-button" onClick={confirmAccess}>Entrer sur le site</button>
           </div>
         </div>

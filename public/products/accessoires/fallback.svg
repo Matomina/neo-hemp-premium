@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350">
+  <defs>
+    <radialGradient id="glow-a" cx="50%" cy="50%" r="42%">
+      <stop offset="0%" stop-color="#d1fae5" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#39ff14" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#39ff14" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="grinder-top" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a5568"/>
+      <stop offset="50%" stop-color="#2d3748"/>
+      <stop offset="100%" stop-color="#1a202c"/>
+    </linearGradient>
+    <linearGradient id="grinder-side" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#374151"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <radialGradient id="grinder-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#39ff14" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#39ff14" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="500" height="350" fill="#020208"/>
+  <ellipse cx="250" cy="175" rx="165" ry="130" fill="url(#glow-a)"/>
+
+  <!-- Grinder (top view + 3/4 perspective) -->
+  <g transform="translate(250,175)">
+    <!-- Outer ring top face (ellipse) -->
+    <ellipse cx="0" cy="-60" rx="82" ry="22" fill="url(#grinder-top)" opacity="0.95"/>
+    <!-- Outer ring side -->
+    <path d="M-82,-60 L-82,20 Q-82,30 0,32 Q82,30 82,20 L82,-60Z"
+          fill="url(#grinder-side)" opacity="0.90"/>
+    <!-- Inner ring top face -->
+    <ellipse cx="0" cy="-60" rx="62" ry="16" fill="#1f2937" opacity="0.85"/>
+    <!-- Inner ring shine -->
+    <ellipse cx="-20" cy="-65" rx="25" ry="7" fill="rgba(255,255,255,0.12)"/>
+    <!-- Teeth slots around edge (top) -->
+    <g opacity="0.55">
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(0,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(30,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(60,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(90,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(120,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(150,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(180,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(210,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(240,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(270,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(300,0,-60)"/>
+      <rect x="-2" y="-80" width="4" height="8" rx="1.5" fill="#9ca3af" transform="rotate(330,0,-60)"/>
+    </g>
+    <!-- Central diamond logo on lid -->
+    <polygon points="0,-74 7,-66 0,-58 -7,-66" fill="none" stroke="#39ff14" stroke-width="1.2" opacity="0.65"/>
+    <!-- Glow inside grinder -->
+    <ellipse cx="0" cy="-60" rx="55" ry="14" fill="url(#grinder-glow)"/>
+    <!-- Bottom chamber -->
+    <ellipse cx="0" cy="32" rx="82" ry="12" fill="#1a202c" opacity="0.70"/>
+    <!-- Side neon stripe -->
+    <line x1="-82" y1="-30" x2="-82" y2="20" stroke="#39ff14" stroke-width="0.8" opacity="0.20"/>
+    <line x1="82" y1="-30" x2="82" y2="20" stroke="#39ff14" stroke-width="0.8" opacity="0.20"/>
+  </g>
+
+  <!-- Glow reflection on floor -->
+  <ellipse cx="250" cy="250" rx="80" ry="15" fill="#39ff14" opacity="0.04"/>
+
+  <text x="250" y="325" text-anchor="middle"
+        fill="rgba(255,255,255,0.28)" font-family="Georgia,serif"
+        font-size="10" letter-spacing="5">ACCESSOIRES</text>
+
+  <polygon points="250,302 256,308 250,314 244,308"
+           fill="none" stroke="#39ff14" stroke-width="0.8" opacity="0.35"/>
+</svg>
