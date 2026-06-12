@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -28,8 +29,9 @@ async function main() {
       console.log(`Admin user already exists: ${adminEmail}`);
     }
   } else {
-    console.warn('ADMIN_EMAIL or ADMIN_PASS_HASH not set — skipping admin seed.');
-    console.warn('Generate a hash with: node -e "require(\'bcryptjs\').hash(\'password\',12).then(console.log)"');
+    console.warn('[seed] ADMIN_EMAIL or ADMIN_PASS_HASH not set in .env — skipping admin user creation.');
+    console.warn('[seed] To generate a bcrypt hash: node -e "require(\'bcryptjs\').hash(\'Admin1234!\',12).then(console.log)"');
+    console.warn('[seed] Set ADMIN_EMAIL and ADMIN_PASS_HASH in backend/.env then re-run the seed.');
   }
 
   // ── Business settings defaults ─────────────────────────────────────────────

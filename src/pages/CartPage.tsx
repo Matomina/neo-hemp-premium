@@ -42,8 +42,8 @@ export default function CartPage() {
         postalCode,
         city,
         country: 'FR',
-        adultConfirmed: true,
-        termsAccepted: true,
+        adultConfirmed,
+        termsAccepted,
       });
 
       navigate('/confirmation', { state: { fromCheckout: true } });
