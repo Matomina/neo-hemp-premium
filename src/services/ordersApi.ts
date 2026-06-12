@@ -1,8 +1,14 @@
 import { apiClient } from './apiClient';
-import type { CartItem } from '../context';
+
+export interface OrderItemPayload {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
 
 export interface DraftOrderPayload {
-  items: CartItem[];
+  items: OrderItemPayload[];
   customerEmail: string;
   customerName: string;
   customerPhone?: string;
@@ -16,6 +22,7 @@ export interface DraftOrderPayload {
 }
 
 export const ordersApi = {
+  submit: (payload: DraftOrderPayload) => apiClient.post('/api/orders', payload),
   draft: (payload: DraftOrderPayload) => apiClient.post('/api/orders/draft', payload),
   confirm: (id: string) => apiClient.post(`/api/orders/${id}/confirm`, {}),
 };

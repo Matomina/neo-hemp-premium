@@ -1667,3 +1667,29 @@ body {
   color: var(--neon-green);
   background-size: 100% 1.5px;
 }
+
+/* ── Contact page ──────────────────────────────────────────────────────────── */
+.contact-success-icon {
+  color: var(--neon-green);
+  margin: 0 auto 12px;
+  display: block;
+}
+
+.contact-error {
+  color: #ff4444;
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+
+/* ── Confirmation page ─────────────────────────────────────────────────────── */
+.confirmation-icon {
+  color: var(--neon-green);
+  margin: 0 auto 16px;
+  display: block;
+}
+
+.confirmation-cta {
+  margin-top: 1.5rem;
+}
+
+.quality-card--centered { text-align: center; }

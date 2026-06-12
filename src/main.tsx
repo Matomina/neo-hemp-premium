@@ -3,15 +3,19 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { CartProvider } from './context';
+import { AdminAuthProvider } from './context/admin/AdminAuthContext';
 import './styles/global.css';
 import './styles/theme.css';
+import './styles/admin.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <CartProvider>
-        <App />
-      </CartProvider>
+      <AdminAuthProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </AdminAuthProvider>
     </BrowserRouter>
   </StrictMode>,
 );
