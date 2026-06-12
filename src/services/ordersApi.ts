@@ -1,5 +1,5 @@
 import { apiClient } from './apiClient';
-import type { CartItem } from '../context/CartContext';
+import type { CartItem } from '../context';
 
 export interface DraftOrderPayload {
   items: CartItem[];
