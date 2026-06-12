@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate as useRRNavigate } from 'react-router-dom';
 import { ArrowRight, BadgeCheck, Boxes, CheckCircle2, CreditCard, FileText, Gem, LockKeyhole, MessageCircle, PackageCheck, ShieldCheck, Truck, UserRound } from 'lucide-react';
 import { Header } from './components/Header';
 import { ProductCard } from './components/ProductCard';
@@ -28,14 +29,11 @@ function App() {
   const [activeCategory, setActiveCategory] = useState<CategorySlug | 'all'>('all');
   const [selectedProduct, setSelectedProduct] = useState<Product>(products[0]);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
   const [accessConfirmed, setAccessConfirmed] = useState(() => localStorage.getItem(ACCESS_KEY) === 'true');
 
-  useEffect(() => {
-    const onPopState = () => setCurrentPath(window.location.pathname || '/');
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
+  const location = useLocation();
+  const rrNavigate = useRRNavigate();
+  const currentPath = location.pathname || '/';
 
   useEffect(() => {
     const SELECTOR = '.product-card, .cat-card-4, .reassurance-item, .category-card, .section-title';
@@ -71,8 +69,7 @@ function App() {
   const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
   const navigate = (path: string) => {
-    window.history.pushState({}, '', path);
-    setCurrentPath(path);
+    rrNavigate(path);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
