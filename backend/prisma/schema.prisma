@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProductCategory {
+  FLEURS
+  RESINES
+  COSMETIQUES
+  ACCESSOIRES
+  CONCENTRES
+  HUILES
+  ELIQUIDES
+  PACKS
+  ANIMAUX
+}
+
+enum LaunchStatus {
+  ACTIVE
+  COMING_SOON
+  COMPLIANCE_REVIEW
+  DISABLED
+}
+
+enum CertificateStatus {
+  PENDING
+  VALIDATED
+  EXPIRED
+  REJECTED
+}
+
+enum OrderStatus {
+  DRAFT
+  PENDING
+  CONFIRMED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  NOT_STARTED
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String?
+  firstName    String?
+  lastName     String?
+  role         UserRole @default(CUSTOMER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  addresses Address[]
+  orders    Order[]
+}
+
+model Address {
+  id           String   @id @default(cuid())
+  userId       String?
+  firstName    String
+  lastName     String
+  phone        String?
+  addressLine1 String
+  addressLine2 String?
+  postalCode   String
+  city         String
+  country      String
+  createdAt    DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+}
+
+model Product {
+  id                       String          @id @default(cuid())
+  slug                     String          @unique
+  name                     String
+  category                 ProductCategory
+  shortDescription         String
+  description              String
+  priceCents               Int
+  oldPriceCents            Int?
+  cbdRate                  String?
+  thcRate                  String?
+  origin                   String?
+  lot                      String?
+  stock                    Int             @default(0)
+  imageUrl                 String?
+  isActive                 Boolean         @default(false)
+  isFeatured               Boolean         @default(false)
+  isBestSeller             Boolean         @default(false)
+  certificateAvailable     Boolean         @default(false)
+  requiresComplianceReview Boolean         @default(true)
+  isSellable               Boolean         @default(false)
+  launchStatus             LaunchStatus    @default(COMPLIANCE_REVIEW)
+  complianceWarning        String?
+  popularityScore          Int             @default(0)
+  createdAt                DateTime        @default(now())
+  updatedAt                DateTime        @updatedAt
+
+  certificates Certificate[]
+  orderItems   OrderItem[]
+}
+
+model Certificate {
+  id        String            @id @default(cuid())
+  productId String?
+  lot       String
+  fileUrl   String
+  labName   String?
+  testedAt  DateTime?
+  thcRate   String?
+  cbdRate   String?
+  status    CertificateStatus @default(PENDING)
+  createdAt DateTime          @default(now())
+
+  product Product? @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id            String        @id @default(cuid())
+  orderNumber   String        @unique
+  userId        String?
+  customerEmail String
+  customerName  String
+  customerPhone String?
+  status        OrderStatus   @default(DRAFT)
+  totalCents    Int
+  paymentStatus PaymentStatus @default(NOT_STARTED)
+  adultConfirmed Boolean
+  termsAccepted  Boolean
+  note          String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user  User?       @relation(fields: [userId], references: [id])
+  items OrderItem[]
+}
+
+model OrderItem {
+  id         String  @id @default(cuid())
+  orderId    String
+  productId  String?
+  name       String
+  quantity   Int
+  unitCents  Int
+  totalCents Int
+
+  order   Order    @relation(fields: [orderId], references: [id])
+  product Product? @relation(fields: [productId], references: [id])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model NewsletterSubscription {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String?
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+}

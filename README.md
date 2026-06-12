@@ -1,35 +1,59 @@
-# Neo Hemp Premium — Maquette React TypeScript
+# Culture Bio Diamant — Boutique CBD Premium
 
-Maquette front-end React + TypeScript pour une boutique CBD premium, moderne, responsable et conforme.
+Interface React + Vite pour Culture Bio Diamant. Design premium : noir, vert néon #d6ff31, violet #bb35ff, glassmorphism.
 
-## Lancer le projet
+## Stack Frontend
+
+- React 18 + TypeScript + Vite
+- React Router DOM
+- CSS vanilla (global.css + theme.css) — pas de Tailwind
+- Lucide React pour les icônes
+
+## Commandes
 
 ```bash
 npm install
-npm run dev
+npm run dev       # dev server
+npm run build     # production build
+npm run lint      # lint
 ```
 
-## Build production
+## Architecture
 
-```bash
-npm run build
-npm run preview
+```
+src/
+  context/       CartContext (localStorage)
+  utils/         formatPrice, slugify, productFilters, compliance, orderNumber
+  services/      apiClient, productsApi, ordersApi, contactApi...
+  config/        env.ts (VITE_API_URL)
+  data/          products.ts, categories.ts, siteContent.ts
+  components/    Header, Footer, ProductCard, SectionTitle, AgeGate...
+  styles/        global.css, theme.css
+  App.tsx        Layout global + routing
 ```
 
-## Pages simulées dans la maquette
+## Variables d'environnement
 
-- Accueil
-- Boutique filtrable
-- Catégories
-- Fiche produit
-- Panier
-- Checkout
-- Guide CBD légal
-- Certificats & traçabilité
-- FAQ
-- Contact
-- Pages légales
+Copier `.env.example` vers `.env` :
 
-## Important conformité
+```env
+VITE_API_URL=http://localhost:4000
+```
 
-Les textes sont volontairement prudents : pas d'allégation médicale, exclusion des aliments CBD au lancement, mise en avant des certificats, lots, THC conforme et majorité 18+.
+En mode développement sans backend, l'app tourne entièrement en mock local.
+
+## Backend
+
+Voir `backend/README.md`. Backend préparé mais non branché en production.
+
+## Conformité CBD
+
+- Aucune promesse médicale
+- THC ≤ 0,30% conforme réglementation française
+- Réservé aux adultes (age gate)
+- **Paiement non activé** — checkout simulé uniquement
+
+## Design
+
+Direction artistique Culture Bio Diamant : ambiance luxe/nature/technologie.
+Ne pas modifier les variables CSS `--green`, `--violet`, `--bg` sans validation design.

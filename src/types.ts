@@ -57,6 +57,13 @@ export type Product = {
   details?: string;
   composition?: string;
   precautions?: string;
+  // ── New enriched fields
+  stock?: number;
+  requiresComplianceReview?: boolean;
+  isSellable?: boolean;
+  launchStatus?: 'active' | 'coming-soon' | 'compliance-review';
+  popularityScore?: number;
+  complianceWarning?: string;
 };
 
 export type CartItem = Product & {
