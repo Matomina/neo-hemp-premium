@@ -22,6 +22,7 @@ export interface DraftOrderPayload {
 }
 
 export const ordersApi = {
+  submit: (payload: DraftOrderPayload) => apiClient.post('/api/orders', payload),
   draft: (payload: DraftOrderPayload) => apiClient.post('/api/orders/draft', payload),
   confirm: (id: string) => apiClient.post(`/api/orders/${id}/confirm`, {}),
 };

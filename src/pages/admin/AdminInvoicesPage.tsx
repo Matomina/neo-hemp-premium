@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AdminLayout } from '../../components/admin/AdminLayout';
-import { listInvoices, regeneratePdf, getInvoicePdfUrl } from '../../services/adminApi';
+import { listInvoices, regeneratePdf, downloadInvoicePdf } from '../../services/adminApi';
 
 interface Invoice { id: string; invoiceNumber: string; type: string; status: string; amountCents: number; issuedAt: string | null; paidAt: string | null; pdfPath: string | null }
 
@@ -23,6 +23,13 @@ export default function AdminInvoicesPage() {
     finally { setWorking(''); }
   };
 
+  const download = async (id: string) => {
+    setWorking(id); setMsg('');
+    try { await downloadInvoicePdf(id); }
+    catch (e) { setMsg(`Erreur téléchargement : ${e instanceof Error ? e.message : String(e)}`); }
+    finally { setWorking(''); }
+  };
+
   return (
     <AdminLayout>
       <div className="admin-page">
@@ -42,7 +49,16 @@ export default function AdminInvoicesPage() {
                     <td>{inv.issuedAt ? new Date(inv.issuedAt).toLocaleDateString('fr-FR') : '—'}</td>
                     <td>
                       {inv.pdfPath
-                        ? <a href={getInvoicePdfUrl(inv.id)} target="_blank" rel="noreferrer" className="admin-btn-sm">Télécharger</a>
+                        ? (
+                          <button
+                            type="button"
+                            className="admin-btn-sm"
+                            disabled={working === inv.id}
+                            onClick={() => download(inv.id)}
+                          >
+                            {working === inv.id ? '...' : 'Télécharger'}
+                          </button>
+                        )
                         : <span className="admin-muted">Aucun</span>}
                     </td>
                     <td><button type="button" className="admin-btn-sm" disabled={working === inv.id} onClick={() => regen(inv.id)}>Régénérer PDF</button></td>

@@ -26,12 +26,12 @@ export const getDashboardSummary = () => adminFetch<Record<string, unknown>>('/a
 export const getDashboardActivity = () => adminFetch<Record<string, unknown>>('/api/admin/dashboard/activity');
 
 // ── Quotes ───────────────────────────────────────────────────────────────────
-export const listQuotes = (page = 1) => adminFetch<{ items: unknown[]; total: number }>(`/api/admin/quotes/admin?page=${page}`);
-export const getQuote = (id: string) => adminFetch<Record<string, unknown>>(`/api/admin/quotes/admin/${id}`);
-export const updateQuote = (id: string, body: object) => adminFetch<Record<string, unknown>>(`/api/admin/quotes/admin/${id}`, { method: 'PATCH', body: JSON.stringify(body) });
-export const approveQuote = (id: string) => adminFetch<Record<string, unknown>>(`/api/admin/quotes/admin/${id}/approve`, { method: 'POST' });
-export const sendQuotePayment = (id: string) => adminFetch<Record<string, unknown>>(`/api/admin/quotes/admin/${id}/send-payment`, { method: 'POST' });
-export const cancelQuote = (id: string) => adminFetch<Record<string, unknown>>(`/api/admin/quotes/admin/${id}/cancel`, { method: 'POST' });
+export const listQuotes = (page = 1) => adminFetch<{ items: unknown[]; total: number }>(`/api/quotes/admin?page=${page}`);
+export const getQuote = (id: string) => adminFetch<Record<string, unknown>>(`/api/quotes/admin/${id}`);
+export const updateQuote = (id: string, body: object) => adminFetch<Record<string, unknown>>(`/api/quotes/admin/${id}`, { method: 'PATCH', body: JSON.stringify(body) });
+export const approveQuote = (id: string) => adminFetch<Record<string, unknown>>(`/api/quotes/admin/${id}/approve`, { method: 'POST' });
+export const sendQuotePayment = (id: string) => adminFetch<Record<string, unknown>>(`/api/quotes/admin/${id}/send-payment`, { method: 'POST' });
+export const cancelQuote = (id: string) => adminFetch<Record<string, unknown>>(`/api/quotes/admin/${id}/cancel`, { method: 'POST' });
 
 // ── Orders ───────────────────────────────────────────────────────────────────
 export const listOrders = (page = 1) => adminFetch<{ items: unknown[]; total: number }>(`/api/orders/admin?page=${page}`);
@@ -50,7 +50,19 @@ export const updateContact = (id: string, body: object) => adminFetch<Record<str
 export const listInvoices = (page = 1) => adminFetch<{ items: unknown[]; total: number }>(`/api/admin/invoices?page=${page}`);
 export const getInvoice = (id: string) => adminFetch<Record<string, unknown>>(`/api/admin/invoices/${id}`);
 export const regeneratePdf = (id: string) => adminFetch<Record<string, unknown>>(`/api/admin/invoices/${id}/regenerate-pdf`, { method: 'POST' });
-export const getInvoicePdfUrl = (id: string) => `${ENV.API_URL}/api/admin/invoices/${id}/pdf?token=${getToken()}`;
+export async function downloadInvoicePdf(id: string): Promise<void> {
+  const res = await fetch(`${ENV.API_URL}/api/admin/invoices/${id}/pdf`, {
+    headers: { Authorization: `Bearer ${getToken()}` },
+  });
+  if (!res.ok) throw new Error(`Erreur ${res.status}`);
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `facture-${id}.pdf`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 // ── Payments ──────────────────────────────────────────────────────────────────
 export const listPayments = (page = 1) => adminFetch<{ items: unknown[]; total: number }>(`/api/admin/payments/admin?page=${page}`);
