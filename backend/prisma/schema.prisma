@@ -7,6 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ─── ENUMS ──────────────────────────────────────────────────────────────────
+
 enum ProductCategory {
   FLEURS
   RESINES
@@ -33,26 +35,82 @@ enum CertificateStatus {
   REJECTED
 }
 
-enum OrderStatus {
-  DRAFT
-  PENDING
-  CONFIRMED
-  CANCELLED
-  REFUNDED
-}
-
-enum PaymentStatus {
-  NOT_STARTED
-  PENDING
-  PAID
-  FAILED
-  REFUNDED
-}
-
 enum UserRole {
   CUSTOMER
   ADMIN
+  SUPER_ADMIN
+  SUPPORT
 }
+
+enum QuoteStatus {
+  NEW
+  REVIEWED
+  APPROVED
+  PAYMENT_SENT
+  PAID
+  CANCELLED
+  EXPIRED
+}
+
+enum OrderStatus {
+  CART_SUBMITTED
+  PENDING_ADMIN_REVIEW
+  APPROVED
+  PAYMENT_SENT
+  PAID
+  CANCELLED
+  REFUNDED
+  EXPIRED
+  // Legacy values kept for backward compat
+  DRAFT
+  PENDING
+  CONFIRMED
+}
+
+enum InvoiceType {
+  QUOTE
+  ORDER
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  CANCELLED
+}
+
+enum PaymentProvider {
+  STRIPE
+}
+
+enum PaymentType {
+  QUOTE
+  ORDER
+}
+
+enum PaymentStatusEnum {
+  CREATED
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  EXPIRED
+}
+
+enum EmailStatus {
+  QUEUED
+  SENT
+  FAILED
+  SKIPPED_DEV
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  ARCHIVED
+}
+
+// ─── MODELS ─────────────────────────────────────────────────────────────────
 
 model User {
   id           String   @id @default(cuid())
@@ -60,12 +118,16 @@ model User {
   passwordHash String?
   firstName    String?
   lastName     String?
+  name         String?
   role         UserRole @default(CUSTOMER)
+  isActive     Boolean  @default(true)
+  lastLoginAt  DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   addresses Address[]
   orders    Order[]
+  auditLogs AuditLog[]
 }
 
 model Address {
@@ -78,10 +140,26 @@ model Address {
   addressLine2 String?
   postalCode   String
   city         String
-  country      String
+  country      String   @default("FR")
   createdAt    DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id])
+}
+
+model Customer {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  firstName       String?
+  lastName        String?
+  phone           String?
+  billingAddress  Json?
+  shippingAddress Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  orders        Order[]
+  quoteRequests QuoteRequest[]
+  invoices      Invoice[]
 }
 
 model Product {
@@ -130,24 +208,67 @@ model Certificate {
   product Product? @relation(fields: [productId], references: [id])
 }
 
-model Order {
-  id            String        @id @default(cuid())
-  orderNumber   String        @unique
-  userId        String?
-  customerEmail String
-  customerName  String
-  customerPhone String?
-  status        OrderStatus   @default(DRAFT)
-  totalCents    Int
-  paymentStatus PaymentStatus @default(NOT_STARTED)
-  adultConfirmed Boolean
-  termsAccepted  Boolean
-  note          String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+model QuoteRequest {
+  id               String      @id @default(cuid())
+  publicRef        String      @unique
+  status           QuoteStatus @default(NEW)
+  customerId       String?
+  customerSnapshot Json
+  simulatorPayload Json?
+  items            Json
+  subtotalCents    Int
+  taxCents         Int         @default(0)
+  shippingCents    Int         @default(0)
+  totalCents       Int
+  currency         String      @default("EUR")
+  adminNotes       String?
+  clientMessage    String?
+  approvedAt       DateTime?
+  paymentSentAt    DateTime?
+  paidAt           DateTime?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
 
-  user  User?       @relation(fields: [userId], references: [id])
-  items OrderItem[]
+  customer Customer?  @relation(fields: [customerId], references: [id])
+  invoices Invoice[]
+  payments Payment[]
+  emails   EmailLog[]
+}
+
+model Order {
+  id               String      @id @default(cuid())
+  publicRef        String      @unique @default(cuid())
+  // Legacy field kept for backward compat
+  orderNumber      String?     @unique
+  customerId       String?
+  userId           String?
+  customerEmail    String
+  customerName     String
+  customerPhone    String?
+  customerSnapshot Json?
+  status           OrderStatus @default(CART_SUBMITTED)
+  items            Json?
+  subtotalCents    Int         @default(0)
+  taxCents         Int         @default(0)
+  shippingCents    Int         @default(0)
+  totalCents       Int
+  currency         String      @default("EUR")
+  adminNotes       String?
+  adultConfirmed   Boolean     @default(false)
+  termsAccepted    Boolean     @default(false)
+  note             String?
+  approvedAt       DateTime?
+  paymentSentAt    DateTime?
+  paidAt           DateTime?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  customer  Customer?   @relation(fields: [customerId], references: [id])
+  user      User?       @relation(fields: [userId], references: [id])
+  orderItems OrderItem[]
+  invoices  Invoice[]
+  payments  Payment[]
+  emails    EmailLog[]
 }
 
 model OrderItem {
@@ -159,18 +280,84 @@ model OrderItem {
   unitCents  Int
   totalCents Int
 
-  order   Order    @relation(fields: [orderId], references: [id])
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product? @relation(fields: [productId], references: [id])
 }
 
+model Invoice {
+  id            String        @id @default(cuid())
+  invoiceNumber String        @unique
+  type          InvoiceType
+  quoteId       String?
+  orderId       String?
+  customerId    String?
+  status        InvoiceStatus @default(DRAFT)
+  pdfUrl        String?
+  pdfPath       String?
+  amountCents   Int
+  currency      String        @default("EUR")
+  issuedAt      DateTime?
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  quote    QuoteRequest? @relation(fields: [quoteId], references: [id])
+  order    Order?        @relation(fields: [orderId], references: [id])
+  customer Customer?     @relation(fields: [customerId], references: [id])
+  payments Payment[]
+}
+
+model Payment {
+  id                       String            @id @default(cuid())
+  type                     PaymentType
+  quoteId                  String?
+  orderId                  String?
+  invoiceId                String?
+  provider                 PaymentProvider   @default(STRIPE)
+  stripeCheckoutSessionId  String?           @unique
+  stripePaymentIntentId    String?
+  status                   PaymentStatusEnum @default(CREATED)
+  checkoutUrl              String?
+  amountCents              Int
+  currency                 String            @default("EUR")
+  idempotencyKey           String?           @unique
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+
+  quote   QuoteRequest? @relation(fields: [quoteId], references: [id])
+  order   Order?        @relation(fields: [orderId], references: [id])
+  invoice Invoice?      @relation(fields: [invoiceId], references: [id])
+}
+
+model EmailLog {
+  id                String      @id @default(cuid())
+  type              String
+  to                String
+  subject           String
+  status            EmailStatus @default(QUEUED)
+  providerMessageId String?
+  payload           Json?
+  error             String?
+  quoteId           String?
+  orderId           String?
+  createdAt         DateTime    @default(now())
+
+  quote QuoteRequest? @relation(fields: [quoteId], references: [id])
+  order Order?        @relation(fields: [orderId], references: [id])
+}
+
 model ContactMessage {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  subject   String?
-  message   String
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
+  id         String        @id @default(cuid())
+  name       String
+  email      String
+  phone      String?
+  subject    String?
+  message    String
+  status     ContactStatus @default(NEW)
+  adminNotes String?
+  isRead     Boolean       @default(false)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
 }
 
 model NewsletterSubscription {
@@ -181,11 +368,22 @@ model NewsletterSubscription {
 }
 
 model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  action     String
+  entityType String?
+  entityId   String?
+  entity     String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id])
+}
+
+model BusinessSetting {
   id        String   @id @default(cuid())
-  actorId   String?
-  action    String
-  entity    String?
-  entityId  String?
-  metadata  Json?
+  key       String   @unique
+  value     Json
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

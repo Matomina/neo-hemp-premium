@@ -1,7 +1,7 @@
 import { prisma } from '../../config/prisma';
 
 export async function listAdminOrders() {
-  return prisma.order.findMany({ include: { items: true }, orderBy: { createdAt: 'desc' } });
+  return prisma.order.findMany({ include: { orderItems: true }, orderBy: { createdAt: 'desc' } });
 }
 
 export async function updateOrderStatus(id: string, status: string) {

@@ -1,15 +1,58 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard, ShieldCheck } from 'lucide-react';
 import { SectionTitle } from '../components/SectionTitle';
 import { useCart } from '../context';
+import { ordersApi } from '../services/ordersApi';
+import { ENV } from '../config/env';
 
 export default function CartPage() {
   const { items, total, removeFromCart, setQuantity } = useCart();
   const navigate = useNavigate();
 
-  const validateSimulatedCheckout = () => {
-    navigate('/confirmation', { state: { fromCheckout: true } });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [address, setAddress] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [city, setCity] = useState('');
+  const [adultConfirmed, setAdultConfirmed] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleCheckout = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (items.length === 0) return;
+    setLoading(true);
+    setError('');
+
+    try {
+      if (ENV.IS_MOCK) {
+        // No backend configured — navigate to confirmation directly
+        navigate('/confirmation', { state: { fromCheckout: true } });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      await ordersApi.draft({
+        items: items.map(i => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity })),
+        customerEmail: email,
+        customerName: fullName,
+        addressLine1: address,
+        postalCode,
+        city,
+        country: 'FR',
+        adultConfirmed: true,
+        termsAccepted: true,
+      });
+
+      navigate('/confirmation', { state: { fromCheckout: true } });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de la soumission. Réessayez.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -18,10 +61,10 @@ export default function CartPage() {
         <SectionTitle
           eyebrow="Panier"
           title="Résumé de commande premium"
-          text="Le panier doit rassurer : produits clairs, quantités lisibles, total estimé, rappel de la conformité et tunnel simple."
+          text="Produits clairs, quantités lisibles, total estimé, rappel de conformité CBD."
         />
         {items.length === 0
-          ? <p className="empty-cart">Ton panier est vide. Ajoute un produit pour tester le parcours d'achat de la maquette.</p>
+          ? <p className="empty-cart">Ton panier est vide. Ajoute un produit pour tester le parcours d'achat.</p>
           : items.map((item) => (
             <div className="cart-row" key={item.id}>
               <span>{item.name} × {item.quantity}</span>
@@ -37,23 +80,73 @@ export default function CartPage() {
           <span>Total estimé</span>
           <strong>{total.toFixed(2).replace('.', ',')} €</strong>
         </div>
-        <div className="cart-reassurance"><CreditCard size={18} /> Paiement compatible CBD à valider avant production</div>
-        <div className="cart-reassurance"><ShieldCheck size={18} /> Produits réels à publier uniquement avec certificats et lots associés</div>
+        <div className="cart-reassurance"><CreditCard size={18} /> Paiement CBD compatible — validation admin requise avant débit</div>
+        <div className="cart-reassurance"><ShieldCheck size={18} /> Produits soumis à conformité réglementaire (THC &lt; 0,3%)</div>
       </div>
+
       <div className="checkout-panel">
         <SectionTitle
-          eyebrow="Checkout"
-          title="Tunnel court et rassurant"
-          text="Formulaire simulé pour préparer le futur tunnel de commande."
+          eyebrow="Informations de livraison"
+          title="Finaliser la commande"
+          text="Votre commande sera soumise à validation par notre équipe avant génération de la facture et du lien de paiement."
         />
-        <form className="checkout-form" onSubmit={(e) => e.preventDefault()}>
-          <input placeholder="Email" />
-          <input placeholder="Nom et prénom" />
-          <input placeholder="Adresse de livraison" />
-          <label><input type="checkbox" /> J'accepte les conditions d'utilisation et les CGV</label>
-          <label><input type="checkbox" /> Je confirme être majeur</label>
-          <button type="button" className="primary-button" onClick={validateSimulatedCheckout}>
-            Simuler la validation
+        {error && <p className="contact-error">{error}</p>}
+        <form className="checkout-form" onSubmit={handleCheckout}>
+          <input
+            placeholder="Email *"
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required={!ENV.IS_MOCK}
+          />
+          <input
+            placeholder="Nom et prénom *"
+            value={fullName}
+            onChange={e => setFullName(e.target.value)}
+            required={!ENV.IS_MOCK}
+          />
+          <input
+            placeholder="Adresse de livraison *"
+            value={address}
+            onChange={e => setAddress(e.target.value)}
+            required={!ENV.IS_MOCK}
+          />
+          <input
+            placeholder="Code postal *"
+            value={postalCode}
+            onChange={e => setPostalCode(e.target.value)}
+            required={!ENV.IS_MOCK}
+          />
+          <input
+            placeholder="Ville *"
+            value={city}
+            onChange={e => setCity(e.target.value)}
+            required={!ENV.IS_MOCK}
+          />
+          <label>
+            <input
+              type="checkbox"
+              checked={termsAccepted}
+              onChange={e => setTermsAccepted(e.target.checked)}
+              required={!ENV.IS_MOCK}
+            />
+            {' '}J'accepte les conditions d'utilisation et les CGV
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={adultConfirmed}
+              onChange={e => setAdultConfirmed(e.target.checked)}
+              required={!ENV.IS_MOCK}
+            />
+            {' '}Je confirme être majeur (18 ans et plus)
+          </label>
+          <button
+            type="submit"
+            className="primary-button"
+            disabled={loading || items.length === 0}
+          >
+            {loading ? 'Envoi en cours...' : ENV.IS_MOCK ? 'Simuler la validation' : 'Soumettre la commande'}
           </button>
         </form>
       </div>

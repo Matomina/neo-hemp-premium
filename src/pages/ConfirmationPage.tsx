@@ -35,8 +35,8 @@ export default function ConfirmationPage() {
         }
       />
       <div className="guide-grid">
-        <div className="quality-card" style={{ textAlign: 'center' }}>
-          <CheckCircle2 size={48} style={{ margin: '0 auto 1rem', color: 'var(--neon-green)' }} />
+        <div className="quality-card quality-card--centered">
+          <CheckCircle2 size={48} className="confirmation-icon" />
           <h3>{fromCheckout ? 'Merci pour votre commande simulée' : 'Aucune commande simulée active'}</h3>
           <p>
             {fromCheckout
@@ -46,8 +46,7 @@ export default function ConfirmationPage() {
           </p>
           <button
             type="button"
-            className="primary-button"
-            style={{ marginTop: '1.5rem' }}
+            className="primary-button confirmation-cta"
             onClick={() => navigate(fromCheckout ? '/' : '/panier')}
           >
             {fromCheckout ? "Retour à l'accueil" : 'Retour au panier'}
