@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { adminCertificates, adminMarkMessageRead, adminMessages, adminOrders, adminUpdateOrderStatus } from './admin.controller';
-import { requireAdmin } from '../../middlewares/requireAdmin';
+import { requireAdmin } from '../../middleware/adminAuth';
 
 const router = Router();
 router.use(requireAdmin);

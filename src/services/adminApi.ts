@@ -65,4 +65,5 @@ export async function downloadInvoicePdf(id: string): Promise<void> {
 }
 
 // ── Payments ──────────────────────────────────────────────────────────────────
-export const listPayments = (page = 1) => adminFetch<{ items: unknown[]; total: number }>(`/api/admin/payments/admin?page=${page}`);
+export const listPayments = (page = 1) => adminFetch<{ items: unknown[]; total: number }>(`/api/admin/payments?page=${page}`);
+export const getPayment = (id: string) => adminFetch<Record<string, unknown>>(`/api/admin/payments/${id}`);
