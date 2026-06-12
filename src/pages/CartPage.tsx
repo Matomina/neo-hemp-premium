@@ -1,11 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import { CreditCard, ShieldCheck } from 'lucide-react';
 import { SectionTitle } from '../components/SectionTitle';
 import { useCart } from '../context';
-import { useScrollNavigate } from '../hooks/useScrollNavigate';
 
 export default function CartPage() {
   const { items, total, removeFromCart, setQuantity } = useCart();
-  const navigate = useScrollNavigate();
+  const navigate = useNavigate();
+
+  const validateSimulatedCheckout = () => {
+    navigate('/confirmation', { state: { fromCheckout: true } });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <section className="section container cart-checkout-grid page-section">
@@ -47,7 +52,7 @@ export default function CartPage() {
           <input placeholder="Adresse de livraison" />
           <label><input type="checkbox" /> J'accepte les conditions d'utilisation et les CGV</label>
           <label><input type="checkbox" /> Je confirme être majeur</label>
-          <button type="button" className="primary-button" onClick={() => navigate('/confirmation')}>
+          <button type="button" className="primary-button" onClick={validateSimulatedCheckout}>
             Simuler la validation
           </button>
         </form>

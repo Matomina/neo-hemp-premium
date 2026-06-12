@@ -37,6 +37,9 @@ export function AppRoutes() {
       <Route path="/livraison-retours" element={<DeliveryPage />} />
       <Route path="/mentions-legales" element={<LegalPage />} />
       <Route path="/cgv" element={<LegalPage />} />
+      <Route path="/confidentialite" element={<LegalPage />} />
+      <Route path="/cookies" element={<LegalPage />} />
+      <Route path="/retractation" element={<LegalPage />} />
       <Route path="/politique-confidentialite" element={<LegalPage />} />
       <Route path="/politique-cookies" element={<LegalPage />} />
       <Route path="/droit-de-retractation" element={<LegalPage />} />
