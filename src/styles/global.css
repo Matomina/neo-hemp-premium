@@ -478,21 +478,24 @@ body {
   transition: color 0.2s, border-color 0.2s, box-shadow 0.25s;
 }
 .nav-action-btn:hover {
-  box-shadow: 0 0 14px rgba(91,255,154,.22);
+  box-shadow: 0 0 14px rgba(214,255,49,.24), 0 0 28px rgba(187,53,255,.12);
 }
 
 /* ── CTA header bouton ── */
 .cta-header {
-  background: rgba(91,255,154,.10);
-  border: 1px solid rgba(91,255,154,.40);
-  box-shadow: 0 0 14px rgba(91,255,154,.12);
+  background: rgba(214,255,49,.08);
+  border: 1px solid rgba(214,255,49,.36);
+  box-shadow: 0 0 14px rgba(214,255,49,.10), 0 0 24px rgba(187,53,255,.06);
   transition: background 0.22s, border-color 0.22s, box-shadow 0.28s, transform 0.2s;
   color: var(--neon-green);
 }
 .cta-header:hover {
-  background: rgba(91,255,154,.18);
-  border-color: rgba(91,255,154,.65);
-  box-shadow: 0 0 22px rgba(91,255,154,.30);
+  background: rgba(214,255,49,.14);
+  border-color: rgba(214,255,49,.58);
+  box-shadow:
+    0 0 0 1px rgba(214,255,49,.38),
+    0 0 16px 4px rgba(214,255,49,.40),
+    0 0 38px 10px rgba(187,53,255,.26);
   transform: translateY(-1px);
 }
 
@@ -519,7 +522,11 @@ body {
 
 .primary-button:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 38px rgba(50,213,131,.55), 0 0 0 3px rgba(91,255,154,.20);
+  box-shadow:
+    0 0 0 1px rgba(214,255,49,.42),
+    0 0 18px 5px rgba(214,255,49,.48),
+    0 0 48px 14px rgba(187,53,255,.32),
+    0 8px 32px rgba(0,0,0,.22);
 }
 .primary-button:hover::before { transform: translateX(320%) skewX(-18deg); }
 .primary-button:active { transform: translateY(0) scale(0.99); }
@@ -533,11 +540,15 @@ body {
   transition: border-color 0.25s, background 0.25s, transform 0.22s, box-shadow 0.28s, color 0.22s;
 }
 .ghost-button:hover {
-  border-color: rgba(91,255,154,.42);
-  background: rgba(91,255,154,.07);
+  border-color: rgba(214,255,49,.55);
+  background: rgba(214,255,49,.07);
   color: var(--neon-green);
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(91,255,154,.20);
+  box-shadow:
+    0 0 0 1px rgba(214,255,49,.38),
+    0 0 16px 4px rgba(214,255,49,.40),
+    0 0 40px 12px rgba(187,53,255,.26),
+    0 6px 24px rgba(0,0,0,.18);
 }
 
 /* ── Hero ── */
@@ -572,8 +583,8 @@ body {
   transition: background 0.2s, box-shadow 0.2s;
 }
 .trust-badge:hover {
-  background: rgba(91,255,154,.13);
-  box-shadow: 0 0 12px rgba(91,255,154,.20);
+  background: rgba(214,255,49,.10);
+  box-shadow: 0 0 12px rgba(214,255,49,.18), 0 0 24px rgba(187,53,255,.08);
 }
 
 /* ── Category cards 4-up ── */
@@ -585,8 +596,8 @@ body {
   box-shadow: 0 0 34px rgba(91,255,154,.17), 0 20px 55px rgba(0,0,0,.48);
   transform: translateY(-5px) scale(1.01);
 }
-.cat-card-4-cta { color: var(--neon-green); transition: gap 0.2s; }
-.cat-card-4:hover .cat-card-4-cta { gap: .44rem; }
+.cat-card-4-cta { color: var(--neon-green); }
+.cat-card-4:hover .cat-card-4-cta { gap: .44rem; background-size: 100% 1.5px; }
 
 /* ── Réassurance items ── */
 .reassurance-item {
@@ -615,8 +626,11 @@ body {
   transition: border-color 0.25s, box-shadow 0.28s;
 }
 .bestsellers-teaser:hover {
-  border-color: rgba(91,255,154,.34);
-  box-shadow: 0 0 26px rgba(91,255,154,.10);
+  border-color: rgba(214,255,49,.50);
+  box-shadow:
+    0 0 0 1px rgba(214,255,49,.34),
+    0 0 20px 5px rgba(214,255,49,.38),
+    0 0 50px 14px rgba(187,53,255,.24);
 }
 .bestsellers-teaser-eyebrow { color: var(--neon-green); }
 
@@ -635,19 +649,24 @@ body {
 }
 
 .boutique-filter-select {
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-.boutique-filter-select:hover { border-color: rgba(91,255,154,.38); }
+.boutique-filter-select:hover { border-color: rgba(214,255,49,.40); box-shadow: 0 0 10px rgba(214,255,49,.10); }
 
 /* ── Compact product cards ── */
 .product-card-sm {
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.25s, transform 0.22s;
+  transition: border-color 0.25s, background 0.25s, box-shadow 0.3s, transform 0.28s cubic-bezier(.22,1,.36,1);
 }
 .product-card-sm:hover,
 .product-card-sm--active {
-  border-color: rgba(91,255,154,.48);
-  background: rgba(91,255,154,.07);
-  box-shadow: 0 0 16px rgba(91,255,154,.16);
+  border-color: rgba(214,255,49,.55);
+  filter: brightness(1.05);
+  background: rgba(214,255,49,.07);
+  box-shadow:
+    0 0 0 1px rgba(214,255,49,.42),
+    0 0 16px 4px rgba(214,255,49,.48),
+    0 0 40px 12px rgba(187,53,255,.32),
+    inset 0 0 16px rgba(214,255,49,.06);
   transform: translateY(-2px);
 }
 
@@ -662,7 +681,7 @@ body {
   transition: box-shadow 0.25s, transform 0.2s;
 }
 .boutique-featured-add:hover {
-  box-shadow: 0 5px 22px rgba(50,213,131,.52);
+  box-shadow: 0 5px 22px rgba(214,255,49,.30), 0 0 36px rgba(187,53,255,.14);
   transform: translateY(-1px);
 }
 .boutique-cert-btn {
@@ -693,9 +712,9 @@ body {
 }
 .product-card:hover {
   transform: translateY(-9px) scale(1.01);
-  border-color: rgba(91,255,154,.36);
-  background: linear-gradient(180deg, rgba(91,255,154,.08), rgba(192,123,255,.05) 34%, rgba(255,255,255,.04));
-  box-shadow: 0 24px 74px rgba(0,0,0,.42), 0 0 36px rgba(91,255,154,.16), 0 0 64px rgba(192,123,255,.10);
+  border-color: rgba(214,255,49,.36);
+  background: linear-gradient(180deg, rgba(214,255,49,.08), rgba(187,53,255,.05) 34%, rgba(255,255,255,.04));
+  box-shadow: 0 24px 74px rgba(0,0,0,.42), 0 0 36px rgba(214,255,49,.16), 0 0 64px rgba(187,53,255,.10);
 }
 .product-footer button {
   background: linear-gradient(135deg, #f4fff9, #c8ffe0);
@@ -703,7 +722,7 @@ body {
 }
 .product-footer button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(50,213,131,.26);
+  box-shadow: 0 6px 20px rgba(214,255,49,.22), 0 0 28px rgba(187,53,255,.10);
 }
 
 /* ── Category cards (boutique old grid) ── */
@@ -711,8 +730,15 @@ body {
   transition: border-color 0.25s, box-shadow 0.3s, transform 0.3s;
 }
 .category-card:hover {
-  border-color: rgba(91,255,154,.42);
-  box-shadow: 0 0 32px rgba(91,255,154,.13), 0 16px 44px rgba(0,0,0,.32);
+  border-color: rgba(214,255,49,.55);
+  filter: brightness(1.04);
+  box-shadow:
+    0 0 0 1px rgba(214,255,49,.42),
+    0 0 22px 6px rgba(214,255,49,.50),
+    0 0 55px 16px rgba(187,53,255,.34),
+    0 0 100px rgba(187,53,255,.16),
+    0 16px 44px rgba(0,0,0,.32),
+    inset 0 0 20px rgba(214,255,49,.06);
   transform: translateY(-4px);
 }
 
@@ -1031,9 +1057,15 @@ body {
 }
 
 .cat-card-4:hover {
-  border-color: rgba(214,255,49,.36);
-  background: linear-gradient(180deg, rgba(214,255,49,.08), rgba(187,53,255,.08));
-  box-shadow: 0 0 28px rgba(214,255,49,.16), 0 0 42px rgba(187,53,255,.12);
+  border-color: rgba(214,255,49,.58);
+  filter: brightness(1.05);
+  background: linear-gradient(180deg, rgba(214,255,49,.10), rgba(187,53,255,.08));
+  box-shadow:
+    0 0 0 1px rgba(214,255,49,.44),
+    0 0 22px 6px rgba(214,255,49,.52),
+    0 0 55px 16px rgba(187,53,255,.36),
+    0 0 100px 30px rgba(187,53,255,.18),
+    inset 0 0 22px rgba(214,255,49,.06);
   transform: translateY(-8px) scale(1.015);
 }
 .cat-card-4:nth-child(1) { animation-delay: .10s; }
@@ -1084,6 +1116,11 @@ body {
   font-size: .72rem;
   font-weight: 700;
   color: var(--green);
+  background-image: linear-gradient(90deg, var(--neon-green), var(--neon-violet));
+  background-size: 0 1.5px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: gap .2s, background-size .25s cubic-bezier(.4,0,.2,1);
 }
 
 /* ── REASSURANCE SECTION ── */
@@ -1107,9 +1144,15 @@ body {
 }
 .reassurance-item:hover {
   transform: translateY(-7px);
-  border-color: rgba(214,255,49,.24);
-  background: linear-gradient(180deg, rgba(214,255,49,.06), rgba(187,53,255,.05));
-  box-shadow: 0 18px 40px rgba(0,0,0,.22), 0 0 24px rgba(187,53,255,.08);
+  border-color: rgba(214,255,49,.50);
+  filter: brightness(1.04);
+  background: linear-gradient(180deg, rgba(214,255,49,.08), rgba(187,53,255,.06));
+  box-shadow:
+    0 0 0 1px rgba(214,255,49,.38),
+    0 0 18px 5px rgba(214,255,49,.44),
+    0 0 44px 12px rgba(187,53,255,.28),
+    0 18px 40px rgba(0,0,0,.22),
+    inset 0 0 18px rgba(214,255,49,.05);
 }
 .reassurance-item:nth-child(1) { animation-delay: .16s; }
 .reassurance-item:nth-child(2) { animation-delay: .22s; }
@@ -1198,7 +1241,7 @@ body {
   font-family: inherit;
 }
 
-.boutique-filter-select:hover { border-color: rgba(140,255,183,.3); }
+.boutique-filter-select:hover { border-color: rgba(214,255,49,.40); box-shadow: 0 0 10px rgba(214,255,49,.10); }
 
 /* ── COMPACT PRODUCT GRID (right panel) ── */
 .boutique-product-grid {
@@ -1221,9 +1264,16 @@ body {
 
 .product-card-sm:hover,
 .product-card-sm--active {
-  border-color: rgba(140,255,183,.4);
-  background: linear-gradient(180deg, rgba(91,255,154,.08), rgba(192,123,255,.05));
-  box-shadow: 0 0 24px rgba(91,255,154,.12), 0 18px 40px rgba(0,0,0,.24);
+  border-color: rgba(214,255,49,.55);
+  filter: brightness(1.05);
+  background: linear-gradient(180deg, rgba(214,255,49,.08), rgba(187,53,255,.05));
+  box-shadow:
+    0 0 0 1px rgba(214,255,49,.42),
+    0 0 20px 5px rgba(214,255,49,.48),
+    0 0 50px 14px rgba(187,53,255,.32),
+    0 0 80px rgba(187,53,255,.14),
+    0 18px 40px rgba(0,0,0,.24),
+    inset 0 0 16px rgba(214,255,49,.06);
 }
 
 .product-card-sm:hover { transform: translateY(-5px); }
@@ -1607,21 +1657,24 @@ body {
     0 0 52px rgba(187,53,255,.09);
 }
 
-/* ── Halo neon — hover ultra fluo vert+violet ── */
+/* ── Halo neon — hover ultra fluo vert+violet — identique au logo ── */
 .product-card:hover {
   transform: translateY(-10px) scale(1.02);
   border-color: rgba(214,255,49,.62);
+  filter: brightness(1.05);
   background: linear-gradient(
     180deg,
-    rgba(214,255,49,.10),
+    rgba(214,255,49,.12),
     rgba(187,53,255,.08) 34%,
     rgba(255,255,255,.04)
   );
   box-shadow:
-    0 28px 80px rgba(0,0,0,.46),
-    0 0 50px rgba(214,255,49,.44),
-    0 0 100px rgba(187,53,255,.30),
-    0 0 150px rgba(214,255,49,.16);
+    0 0 0 1px rgba(214,255,49,.50),
+    0 0 28px 8px rgba(214,255,49,.55),
+    0 0 65px 20px rgba(187,53,255,.40),
+    0 0 130px 40px rgba(187,53,255,.20),
+    0 32px 80px rgba(0,0,0,.48),
+    inset 0 0 32px rgba(214,255,49,.08);
 }
 
 /* ── Logo header — glow flou gradient vert centre → violet autour ── */
@@ -1693,3 +1746,77 @@ body {
 }
 
 .quality-card--centered { text-align: center; }
+
+/* ═══════════════════════════════════════════════════════
+   HOVER PREMIUM — éléments manquants + unification finale
+   Couleur de référence : logo = rgba(214,255,49) + rgba(187,53,255)
+═══════════════════════════════════════════════════════ */
+
+/* ── FAQ details hover ── */
+details {
+  transition: border-color .28s ease, box-shadow .32s ease;
+}
+details:hover {
+  border-color: rgba(214,255,49,.32);
+  box-shadow: 0 0 22px rgba(214,255,49,.10), 0 0 40px rgba(187,53,255,.07);
+}
+summary {
+  cursor: pointer;
+  transition: color .2s;
+  background-image: linear-gradient(90deg, var(--neon-green), var(--neon-violet));
+  background-size: 0 1.5px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: color .2s, background-size .25s cubic-bezier(.4,0,.2,1);
+}
+summary:hover {
+  color: var(--neon-green);
+  background-size: 100% 1.5px;
+}
+
+/* ── Filters panel — hover sur boutons non-actifs ── */
+.filters-panel button:not(.active) {
+  transition: border-color .22s, color .2s, background .22s, box-shadow .25s;
+}
+.filters-panel button:not(.active):hover {
+  border-color: rgba(214,255,49,.38);
+  color: var(--neon-green);
+  background: rgba(214,255,49,.06);
+  box-shadow: 0 0 12px rgba(214,255,49,.12);
+}
+
+/* ── Form inputs focus — neon premium ── */
+.checkout-form input:focus,
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: rgba(214,255,49,.55);
+  box-shadow: 0 0 14px rgba(214,255,49,.14), 0 0 28px rgba(187,53,255,.07);
+}
+
+/* ── Wishlist button hover ── */
+.boutique-featured-wish {
+  transition: color .2s, border-color .22s, box-shadow .25s;
+}
+.boutique-featured-wish:hover {
+  color: var(--neon-green);
+  border-color: rgba(214,255,49,.40);
+  box-shadow: 0 0 12px rgba(214,255,49,.16), 0 0 24px rgba(187,53,255,.08);
+}
+
+/* ── Product card sm add button hover ── */
+.product-card-sm-add {
+  transition: transform .2s, box-shadow .22s;
+}
+.product-card-sm-add:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(214,255,49,.44), 0 0 22px rgba(187,53,255,.18);
+}
+
+/* ── Boutique featured card — hover border neon ── */
+.boutique-featured {
+  transition: border-color .32s ease, box-shadow .38s ease;
+}
+.boutique-featured:hover {
+  border-color: rgba(214,255,49,.24);
+  box-shadow: 0 0 22px rgba(214,255,49,.08), 0 0 40px rgba(187,53,255,.06);
+}
