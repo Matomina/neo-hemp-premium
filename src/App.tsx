@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { AppRoutes } from './routes/routes';
 import { useCart } from './context';
+import MiniCart from './components/MiniCart';
 
 const ACCESS_KEY = 'culture-bio-diamant-majorite-ok';
 
@@ -46,6 +47,7 @@ function App() {
       />
       <main><AppRoutes /></main>
       <Footer onNavigate={navigate} />
+      {!location.pathname.startsWith('/admin') && <MiniCart />}
       <div className="sticky-mobile-cta">
         <span>Voir les produits premium</span>
         <button type="button" onClick={() => navigate('/boutique')}>Boutique</button>

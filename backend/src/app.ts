@@ -20,6 +20,7 @@ import paymentsWebhookRouter from './modules/payments/payments.webhook.router';
 import paymentsAdminRouter from './modules/payments/payments.admin.router';
 import invoicesRouter from './modules/invoices/invoices.router';
 import dashboardRouter from './modules/dashboard/dashboard.router';
+import reviewsRouter from './modules/reviews/reviews.routes';
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/certificates', certificatesRouter);
 app.use('/api/quotes', quotesRouter);
+app.use('/api/reviews', reviewsRouter);
 
 // ── Admin auth (rate-limited, no requireAdmin — login is public) ──────────────
 app.use('/api/admin/auth', authRateLimit, adminAuthRouter);

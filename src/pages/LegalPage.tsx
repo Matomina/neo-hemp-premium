@@ -21,9 +21,9 @@ export default function LegalPage() {
       <SectionTitle eyebrow={page.eyebrow} title={page.title} text={page.intro} />
       <div className="info-grid">
         {page.points.map((point) => (
-          <div className="quality-card" key={point}>
-            <h3>{point}</h3>
-            <p>Information à finaliser avec les données réelles de l'entreprise avant publication officielle.</p>
+          <div className="quality-card" key={point.title}>
+            <h3>{point.title}</h3>
+            <p>{point.text}</p>
           </div>
         ))}
       </div>

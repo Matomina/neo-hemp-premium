@@ -10,8 +10,9 @@ export const defaultRateLimit = rateLimit({
 
 export const authRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 30,
+  skipSuccessfulRequests: true,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: 'Too many auth attempts.' },
+  message: { error: 'Too many auth attempts. Réessayez dans 15 minutes.' },
 });

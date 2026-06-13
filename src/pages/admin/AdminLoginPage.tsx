@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Gem, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import { useAdminAuth } from '../../context/admin/useAdminAuth';
 
 export default function AdminLoginPage() {
@@ -31,7 +31,9 @@ export default function AdminLoginPage() {
     <div className="admin-login-page">
       <div className="admin-login-card">
         <div className="admin-login-brand">
-          <Gem size={32} />
+          <div className="admin-login-logo-wrap">
+            <img src="/cbd-logo.jpeg" alt="Culture Bio Diamant" className="admin-login-logo" />
+          </div>
           <h1>Culture Bio Diamant</h1>
           <p className="admin-login-sub"><ShieldCheck size={13} /> Espace administration</p>
         </div>
