@@ -19,6 +19,8 @@ export interface DraftOrderPayload {
   country: string;
   adultConfirmed: boolean;
   termsAccepted: boolean;
+  shippingFee?: number;
+  totalWithShipping?: number;
 }
 
 export const ordersApi = {

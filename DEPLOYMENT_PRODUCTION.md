@@ -56,8 +56,8 @@ Le fichier `vercel.json` à la racine configure les rewrites SPA pour que toutes
 ## Déploiement Backend (Render)
 
 1. Connecter le repo GitHub sur Render
-2. Build command : `cd backend && npm ci && npm run build && npx prisma generate`
-3. Start command : `cd backend && node dist/server.js`
+2. Build command : `cd backend && npm ci && npx prisma generate && npm run build`
+3. Start command : `cd backend && npm run start`
 4. Ajouter toutes les variables d'environnement ci-dessus
 
 ## Base de données PostgreSQL
@@ -111,6 +111,7 @@ FRONTEND_ORIGINS=https://culture-bio-diamant.vercel.app,https://www.culturebiodi
 
 Les factures PDF sont générées côté backend dans `backend/storage/invoices/`.
 Sur Render, ce dossier est éphémère. Recommandation : connecter un bucket S3 ou Cloudflare R2.
+Sur Render, configurer STORAGE_PATH=/var/data/storage et activer un disque persistant.
 
 ## Conformité CBD
 
@@ -119,6 +120,12 @@ Sur Render, ce dossier est éphémère. Recommandation : connecter un bucket S3 
 - THC ≤ 0,3 % affiché sur tous les produits
 - Certificats laboratoire disponibles sur demande
 - Le champ `requiresComplianceReview` dans le schéma Prisma permet de bloquer la mise en vente d'un produit non validé
+
+## Écarts connus — calcul total commande
+
+Le frontend calcule les frais de livraison (`shippingFee = total > 49 ? 0 : 4,90 €`) et les envoie dans le payload (`shippingFee`, `totalWithShipping`).
+Le backend recalcule `totalCents` uniquement à partir des items (`subtotalCents`) et ignore ces champs — le backend reste l'autorité sur le total.
+Ces champs frontend sont conservés à titre informatif (vérification côté admin possible). Si les frais de livraison doivent être intégrés au total backend, modifier `orders.service.ts` → `createDraftOrder` pour lire `shippingCents` depuis le payload (avec validation zod).
 
 ## Checklist post-déploiement
 
