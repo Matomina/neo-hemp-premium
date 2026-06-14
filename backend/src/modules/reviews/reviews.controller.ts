@@ -8,8 +8,8 @@ export const getReviewsHandler: RequestHandler = async (req, res, next) => {
   try {
     const { productId } = req.params;
     const [reviews, stats] = await Promise.all([
-      getProductReviews(productId),
-      getAverageRating(productId),
+      getProductReviews(String(productId)),
+      getAverageRating(String(productId)),
     ]);
     res.json({ reviews, stats });
   } catch (err) { next(err); }
@@ -24,7 +24,9 @@ export const createReviewHandler: RequestHandler = async (req, res, next) => {
       try {
         const payload = jwt.verify(authHeader.slice(7), ENV.JWT_SECRET) as { sub: string };
         userId = payload.sub;
-      } catch {}
+      } catch {
+        // Token invalide ou expiré — la review sera créée sans userId
+      }
     }
     const review = await createReview({ ...data, userId });
     res.status(201).json(review);
