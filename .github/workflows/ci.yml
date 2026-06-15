@@ -133,6 +133,8 @@ jobs:
     defaults:
       run:
         working-directory: backend
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_culture_bio
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
