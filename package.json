@@ -9,7 +9,11 @@
     "build": "tsc -b && vite build",
     "generate:product-images": "node scripts/generate-product-images.mjs",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
@@ -22,11 +26,17 @@
   },
   "devDependencies": {
     "@eslint/js": "latest",
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@testing-library/user-event": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@vitest/coverage-v8": "latest",
     "eslint": "latest",
     "eslint-plugin-react-hooks": "latest",
     "eslint-plugin-react-refresh": "latest",
-    "typescript-eslint": "latest"
+    "jsdom": "latest",
+    "typescript-eslint": "latest",
+    "vitest": "latest"
   }
 }
