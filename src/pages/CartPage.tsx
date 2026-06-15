@@ -47,6 +47,8 @@ export default function CartPage() {
         country: 'FR',
         adultConfirmed,
         termsAccepted,
+        shippingFee: shipping,
+        totalWithShipping: finalTotal,
       });
       navigate('/confirmation', { state: { fromCheckout: true } });
       window.scrollTo({ top: 0, behavior: 'smooth' });

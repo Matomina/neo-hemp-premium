@@ -19,14 +19,17 @@ const TOKEN_KEY = 'cbd-customer-token';
 export function CustomerAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
-  const [isLoading, setIsLoading] = useState(!!localStorage.getItem(TOKEN_KEY));
+  const [isLoading, setIsLoading] = useState(() => {
+    const stored = localStorage.getItem(TOKEN_KEY);
+    return !!stored && !ENV.IS_MOCK;
+  });
   const initialized = useRef(false);
 
   useEffect(() => {
     if (initialized.current) return;
     initialized.current = true;
     const stored = localStorage.getItem(TOKEN_KEY);
-    if (!stored || ENV.IS_MOCK) { setIsLoading(false); return; }
+    if (!stored || ENV.IS_MOCK) return;
     authApi.me(stored)
       .then(u => { setUser(u); setIsLoading(false); })
       .catch(() => { localStorage.removeItem(TOKEN_KEY); setToken(null); setIsLoading(false); });

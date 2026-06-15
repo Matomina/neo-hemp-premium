@@ -52,9 +52,9 @@ interface Props {
 
 export default function ReviewsSection({ productId }: Props) {
   const { token, user } = useCustomerAuth();
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [stats, setStats] = useState<ReviewStats | null>(null);
-  const [loadingReviews, setLoadingReviews] = useState(true);
+  const [reviews, setReviews] = useState<Review[]>(() => ENV.IS_MOCK ? MOCK_REVIEWS : []);
+  const [stats, setStats] = useState<ReviewStats | null>(() => ENV.IS_MOCK ? MOCK_STATS : null);
+  const [loadingReviews, setLoadingReviews] = useState(!ENV.IS_MOCK);
 
   const [showForm, setShowForm] = useState(false);
   const [authorName, setAuthorName] = useState(user ? `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() || user.email : '');
@@ -65,12 +65,7 @@ export default function ReviewsSection({ productId }: Props) {
   const [formSuccess, setFormSuccess] = useState('');
 
   useEffect(() => {
-    if (ENV.IS_MOCK) {
-      setReviews(MOCK_REVIEWS);
-      setStats(MOCK_STATS);
-      setLoadingReviews(false);
-      return;
-    }
+    if (ENV.IS_MOCK) return;
     reviewsApi.getByProduct(productId)
       .then(({ reviews: r, stats: s }) => { setReviews(r); setStats(s); })
       .catch(() => { setReviews([]); setStats({ average: 0, count: 0 }); })

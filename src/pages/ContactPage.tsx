@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { SectionTitle } from '../components/SectionTitle';
 import { contactApi } from '../services/contactApi';
+import { ENV } from '../config/env';
 import { CheckCircle2 } from 'lucide-react';
 
 export default function ContactPage() {
@@ -18,8 +19,11 @@ export default function ContactPage() {
     setLoading(true);
     setError('');
     try {
-      await contactApi.send({ name, email, subject: subject || undefined, message });
+      const result = await contactApi.send({ name, email, subject: subject || undefined, message });
       setSent(true);
+      if (ENV.IS_MOCK || (result && typeof result === 'object' && 'mock' in result)) {
+        setError('Mode démo — votre message n\'a pas été envoyé.');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur lors de l\'envoi. Réessayez plus tard.');
     } finally {
