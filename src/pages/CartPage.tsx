@@ -33,11 +33,11 @@ export default function CartPage() {
     try {
       if (ENV.IS_MOCK) {
         await new Promise(r => setTimeout(r, 600));
-        navigate('/confirmation', { state: { fromCheckout: true } });
+        navigate('/confirmation', { state: { fromCheckout: true, isMock: true } });
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
-      await ordersApi.submit({
+      const order = await ordersApi.submit({
         items: items.map(i => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity })),
         customerEmail: email,
         customerName: fullName,
@@ -50,7 +50,14 @@ export default function CartPage() {
         shippingFee: shipping,
         totalWithShipping: finalTotal,
       });
-      navigate('/confirmation', { state: { fromCheckout: true } });
+      navigate('/confirmation', {
+        state: {
+          fromCheckout: true,
+          isMock: false,
+          publicRef: order.publicRef,
+          customerEmail: order.customerEmail,
+        },
+      });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur lors de la soumission. Réessayez.');
