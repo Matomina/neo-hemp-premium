@@ -7,3 +7,5 @@ dist
 .vscode
 backend/storage
 backend/dist
+coverage
+backend/coverage
