@@ -23,8 +23,16 @@ export interface DraftOrderPayload {
   totalWithShipping?: number;
 }
 
+export interface OrderResponse {
+  id: string;
+  publicRef: string;
+  customerEmail: string;
+  customerName: string;
+  status: string;
+}
+
 export const ordersApi = {
-  submit: (payload: DraftOrderPayload) => apiClient.post('/api/orders', payload),
-  draft: (payload: DraftOrderPayload) => apiClient.post('/api/orders/draft', payload),
-  confirm: (id: string) => apiClient.post(`/api/orders/${id}/confirm`, {}),
+  submit: (payload: DraftOrderPayload) => apiClient.post<OrderResponse>('/api/orders', payload),
+  draft: (payload: DraftOrderPayload) => apiClient.post<OrderResponse>('/api/orders/draft', payload),
+  confirm: (id: string) => apiClient.post<OrderResponse>(`/api/orders/${id}/confirm`, {}),
 };

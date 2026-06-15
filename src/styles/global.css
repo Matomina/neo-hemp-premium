@@ -1809,6 +1809,104 @@ body {
 
 .quality-card--centered { text-align: center; }
 
+.confirm-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.confirm-icon {
+  color: var(--neon-green);
+  filter: drop-shadow(0 0 12px var(--neon-green));
+  margin-bottom: 1.25rem;
+}
+
+.confirm-empty-icon {
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.confirm-empty-text {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.confirm-title {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.confirm-mock-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--neon-violet);
+  border: 1px solid rgba(187,53,255,0.35);
+  border-radius: 20px;
+  padding: 3px 12px;
+  margin-bottom: 0.75rem;
+}
+
+.confirm-mock-text {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.confirm-ref {
+  margin-bottom: 0.25rem;
+}
+
+.confirm-ref-value {
+  color: var(--neon-green);
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+.confirm-email-hint {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.confirm-steps-title {
+  margin-bottom: 1rem;
+}
+
+.confirm-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.confirm-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.confirm-step-icon-green {
+  color: var(--neon-green);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.confirm-step-icon-violet {
+  color: var(--neon-violet);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.confirm-step-text {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 /* ═══════════════════════════════════════════════════════
    HOVER PREMIUM — éléments manquants + unification finale
    Couleur de référence : logo = rgba(214,255,49) + rgba(187,53,255)
