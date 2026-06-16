@@ -331,6 +331,13 @@ model Payment {
   invoice Invoice?      @relation(fields: [invoiceId], references: [id])
 }
 
+model InvoiceSequence {
+  scope     String   @id
+  value     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model EmailLog {
   id                String      @id @default(cuid())
   type              String

@@ -7,7 +7,7 @@ import { ENV } from '../../config/env';
 import { z } from 'zod';
 
 const ADMIN_EMAIL_TO = ENV.ADMIN_EMAIL || 'admin@culturebiodiamant.fr';
-const ADMIN_URL = `${ENV.FRONTEND_ORIGINS[0]}/admin/contacts`;
+const ADMIN_URL = `${ENV.APP_PUBLIC_URL}/admin/contacts`;
 
 export const submitContact: RequestHandler = async (req, res, next) => {
   try {

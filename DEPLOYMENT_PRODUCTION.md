@@ -27,6 +27,7 @@
 | `ADMIN_EMAIL` | ✅ | Email admin |
 | `ADMIN_PASS_HASH` | ✅ | Hash bcrypt du mot de passe admin |
 | `FRONTEND_ORIGINS` | ✅ | URLs autorisées CORS (séparées par virgule) |
+| `APP_PUBLIC_URL` | ✅ | URL publique du frontend utilisée dans les emails admin/client |
 | `STRIPE_ENABLED` | — | `false` par défaut |
 | `STRIPE_SECRET_KEY` | Si Stripe activé | Clé secrète Stripe |
 | `STRIPE_WEBHOOK_SECRET` | Si Stripe activé | Secret webhook Stripe |
@@ -121,11 +122,19 @@ Sur Render, configurer STORAGE_PATH=/var/data/storage et activer un disque persi
 - Certificats laboratoire disponibles sur demande
 - Le champ `requiresComplianceReview` dans le schéma Prisma permet de bloquer la mise en vente d'un produit non validé
 
-## Écarts connus — calcul total commande
+## Calcul total commande
 
-Le frontend calcule les frais de livraison (`shippingFee = total > 49 ? 0 : 4,90 €`) et les envoie dans le payload (`shippingFee`, `totalWithShipping`).
-Le backend recalcule `totalCents` uniquement à partir des items (`subtotalCents`) et ignore ces champs — le backend reste l'autorité sur le total.
-Ces champs frontend sont conservés à titre informatif (vérification côté admin possible). Si les frais de livraison doivent être intégrés au total backend, modifier `orders.service.ts` → `createDraftOrder` pour lire `shippingCents` depuis le payload (avec validation zod).
+Le backend calcule désormais `subtotalCents`, `shippingCents` et `totalCents`.
+La règle actuelle est :
+- livraison offerte à partir de `49,00 €`
+- sinon `4,90 €`
+
+Le frontend affiche la même règle, mais n'impose plus le total envoyé à l'API.
+
+## Emails admin/client
+
+Les URLs insérées dans les emails utilisent `APP_PUBLIC_URL`.
+Ne pas s'appuyer sur l'ordre de `FRONTEND_ORIGINS` pour les liens envoyés aux utilisateurs.
 
 ## Checklist post-déploiement
 

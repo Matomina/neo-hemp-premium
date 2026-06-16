@@ -3,8 +3,12 @@ import { getCertificatesByProductSlug, listAllCertificates } from './certificate
 
 export const getCertificates: RequestHandler = async (req, res, next) => {
   try {
-    const certs = await getCertificatesByProductSlug(String(req.params.productSlug));
-    res.json(certs);
+    const product = await getCertificatesByProductSlug(String(req.params.productSlug));
+    if (!product) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+    res.json(product.certificates);
   } catch (err) { next(err); }
 };
 

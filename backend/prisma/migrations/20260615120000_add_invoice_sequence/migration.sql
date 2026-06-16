@@ -1,0 +1,8 @@
+CREATE TABLE "InvoiceSequence" (
+    "scope" TEXT NOT NULL,
+    "value" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "InvoiceSequence_pkey" PRIMARY KEY ("scope")
+);

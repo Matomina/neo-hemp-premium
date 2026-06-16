@@ -1,16 +1,23 @@
+import { Prisma, PrismaClient } from '@prisma/client';
 import { prisma } from '../../config/prisma';
 
-export async function generateInvoiceNumber(type: 'Q' | 'F'): Promise<string> {
-  const year = new Date().getFullYear();
+type InvoiceNumberClient = PrismaClient | Prisma.TransactionClient;
+
+export async function generateInvoiceNumber(
+  type: 'Q' | 'F',
+  db: InvoiceNumberClient = prisma,
+  issuedAt = new Date(),
+): Promise<string> {
+  const year = issuedAt.getFullYear();
   const prefix = type === 'Q' ? 'DEV' : 'FAC';
-
-  const count = await prisma.invoice.count({
-    where: {
-      invoiceNumber: { startsWith: `${prefix}-${year}-` },
-    },
+  const scope = `${prefix}-${year}`;
+  const sequence = await db.invoiceSequence.upsert({
+    where: { scope },
+    create: { scope, value: 1 },
+    update: { value: { increment: 1 } },
+    select: { value: true },
   });
-
-  const seq = String(count + 1).padStart(4, '0');
+  const seq = String(sequence.value).padStart(4, '0');
   return `${prefix}-${year}-${seq}`;
 }
 

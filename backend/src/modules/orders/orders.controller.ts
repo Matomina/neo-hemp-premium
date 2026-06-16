@@ -11,7 +11,7 @@ import { ENV } from '../../config/env';
 import { logger } from '../../utils/logger';
 import { z } from 'zod';
 
-const ADMIN_URL = `${ENV.FRONTEND_ORIGINS[0]}/admin/commandes`;
+const ADMIN_URL = `${ENV.APP_PUBLIC_URL}/admin/commandes`;
 const ADMIN_EMAIL_TO = ENV.ADMIN_EMAIL || 'admin@culturebiodiamant.fr';
 
 // POST /api/orders
@@ -36,7 +36,16 @@ export const submitOrder: RequestHandler = async (req, res, next) => {
       orderId: order.id,
     });
 
-    res.status(201).json({ id: order.id, publicRef: order.publicRef, totalCents: order.totalCents });
+    res.status(201).json({
+      id: order.id,
+      publicRef: order.publicRef,
+      customerEmail: order.customerEmail,
+      customerName: order.customerName,
+      status: 'PENDING_ADMIN_REVIEW',
+      subtotalCents: order.subtotalCents,
+      shippingCents: order.shippingCents,
+      totalCents: order.totalCents,
+    });
   } catch (err) { next(err); }
 };
 
@@ -45,7 +54,16 @@ export const draftOrder: RequestHandler = async (req, res, next) => {
   try {
     const data = DraftOrderSchema.parse(req.body);
     const order = await createDraftOrder(data);
-    res.status(201).json({ id: order.id, publicRef: order.publicRef, totalCents: order.totalCents });
+    res.status(201).json({
+      id: order.id,
+      publicRef: order.publicRef,
+      customerEmail: order.customerEmail,
+      customerName: order.customerName,
+      status: order.status,
+      subtotalCents: order.subtotalCents,
+      shippingCents: order.shippingCents,
+      totalCents: order.totalCents,
+    });
   } catch (err) { next(err); }
 };
 
@@ -83,7 +101,19 @@ export async function adminUpdateOrder(req: Request, res: Response): Promise<voi
   const parsed = UpdateSchema.safeParse(req.body);
   if (!parsed.success) { res.status(400).json({ error: 'Validation error', issues: parsed.error.issues }); return; }
 
-  const updated = await prisma.order.update({ where: { id: String(req.params['id']) }, data: parsed.data as Parameters<typeof prisma.order.update>[0]['data'] });
+  const orderId = String(req.params['id']);
+  const existingOrder = await prisma.order.findUnique({ where: { id: orderId } });
+  if (!existingOrder) {
+    res.status(404).json({ error: 'Order not found' });
+    return;
+  }
+
+  const data: Parameters<typeof prisma.order.update>[0]['data'] = { ...parsed.data };
+  if (typeof parsed.data.shippingCents === 'number') {
+    data.totalCents = existingOrder.subtotalCents + existingOrder.taxCents + parsed.data.shippingCents;
+  }
+
+  const updated = await prisma.order.update({ where: { id: orderId }, data });
   res.json(updated);
 }
 
@@ -93,18 +123,28 @@ export async function adminApproveOrder(req: Request, res: Response): Promise<vo
   const order = await getOrder(id);
   if (!order) { res.status(404).json({ error: 'Order not found' }); return; }
 
-  const items = (order.items ?? []) as Array<{ name: string; quantity: number; unitCents: number; totalCents: number }>;
-  const invoiceNumber = await generateInvoiceNumber('F');
+  const items = order.orderItems.map((item) => ({
+    name: item.name,
+    quantity: item.quantity,
+    unitCents: item.unitCents,
+    totalCents: item.totalCents,
+  }));
+  const issuedAt = new Date();
+  const { invoice, invoiceNumber } = await prisma.$transaction(async (tx) => {
+    const nextInvoiceNumber = await generateInvoiceNumber('F', tx, issuedAt);
+    const createdInvoice = await tx.invoice.create({
+      data: {
+        invoiceNumber: nextInvoiceNumber,
+        type: 'ORDER',
+        orderId: order.id,
+        status: 'ISSUED',
+        amountCents: order.totalCents,
+        issuedAt,
+      },
+    });
+    await tx.order.update({ where: { id }, data: { status: 'APPROVED', approvedAt: issuedAt } });
 
-  const invoice = await prisma.invoice.create({
-    data: {
-      invoiceNumber,
-      type: 'ORDER',
-      orderId: order.id,
-      status: 'ISSUED',
-      amountCents: order.totalCents,
-      issuedAt: new Date(),
-    },
+    return { invoice: createdInvoice, invoiceNumber: nextInvoiceNumber };
   });
 
   let pdfPath: string | undefined;
@@ -113,7 +153,7 @@ export async function adminApproveOrder(req: Request, res: Response): Promise<vo
       invoiceNumber,
       type: 'ORDER',
       status: 'ISSUED',
-      issuedAt: new Date(),
+      issuedAt,
       customerName: order.customerName,
       customerEmail: order.customerEmail,
       items,
@@ -129,8 +169,6 @@ export async function adminApproveOrder(req: Request, res: Response): Promise<vo
   } catch (err) {
     logger.error('[ORDER APPROVE] PDF generation failed', err);
   }
-
-  await prisma.order.update({ where: { id }, data: { status: 'APPROVED', approvedAt: new Date() } });
   await logAudit({ actorId: req.adminUser?.sub, action: 'ORDER_APPROVED', entityType: 'Order', entityId: id });
 
   res.json({ ok: true, invoiceId: invoice.id, invoiceNumber, pdfPath });
@@ -141,8 +179,23 @@ export async function adminSendOrderPayment(req: Request, res: Response): Promis
   const id = String(req.params['id']);
   const order = await getOrder(id);
   if (!order) { res.status(404).json({ error: 'Order not found' }); return; }
+  const existingPayment = await prisma.payment.findFirst({
+    where: {
+      orderId: order.id,
+      status: { in: ['CREATED', 'PENDING', 'PAID'] },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+  if (existingPayment?.status === 'PAID') {
+    res.json({ ok: true, paymentId: existingPayment.id, checkoutUrl: existingPayment.checkoutUrl, alreadyPaid: true });
+    return;
+  }
+  if (existingPayment && existingPayment.checkoutUrl) {
+    res.json({ ok: true, paymentId: existingPayment.id, checkoutUrl: existingPayment.checkoutUrl, reused: true });
+    return;
+  }
 
-  const idempotencyKey = `order-${order.id}`;
+  const idempotencyKey = `order-${order.id}-${Date.now()}`;
 
   try {
     const session = await createCheckoutSession({
@@ -157,6 +210,7 @@ export async function adminSendOrderPayment(req: Request, res: Response): Promis
       data: {
         type: 'ORDER',
         orderId: order.id,
+        invoiceId: order.invoices[0]?.id,
         stripeCheckoutSessionId: session.sessionId,
         stripePaymentIntentId: session.paymentIntentId,
         checkoutUrl: session.checkoutUrl,

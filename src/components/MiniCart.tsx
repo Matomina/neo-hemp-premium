@@ -2,12 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Minus, Plus, ShoppingBag, Trash2, X } from 'lucide-react';
 import { useCart } from '../context';
+import { computeDisplayedShipping, ORDER_PRICING } from '../utils/orderPricing';
 
 export default function MiniCart() {
   const [open, setOpen] = useState(false);
   const { items, count, total, removeFromCart, setQuantity } = useCart();
   const navigate = useNavigate();
   const wrapRef = useRef<HTMLDivElement>(null);
+  const shipping = computeDisplayedShipping(total);
+  const finalTotal = total + shipping;
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
@@ -127,11 +130,11 @@ export default function MiniCart() {
               <div className="mc-footer">
                 <div className="mc-total-row">
                   <span>Total estimé</span>
-                  <strong>{total.toFixed(2).replace('.', ',')} €</strong>
+                  <strong>{finalTotal.toFixed(2).replace('.', ',')} €</strong>
                 </div>
-                {total < 49 && (
+                {total < ORDER_PRICING.FREE_SHIPPING_THRESHOLD && (
                   <p className="mc-free-hint">
-                    Plus que {(49 - total).toFixed(2).replace('.', ',')} € pour la livraison offerte
+                    Plus que {(ORDER_PRICING.FREE_SHIPPING_THRESHOLD - total).toFixed(2).replace('.', ',')} € pour la livraison offerte
                   </p>
                 )}
                 <button

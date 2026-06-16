@@ -7,6 +7,7 @@ import {
 import { useCart } from '../context';
 import { ordersApi } from '../services/ordersApi';
 import { ENV } from '../config/env';
+import { computeDisplayedShipping, ORDER_PRICING } from '../utils/orderPricing';
 
 export default function CartPage() {
   const { items, total, removeFromCart, setQuantity } = useCart();
@@ -22,7 +23,7 @@ export default function CartPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const shipping = total > 49 || total === 0 ? 0 : 4.90;
+  const shipping = computeDisplayedShipping(total);
   const finalTotal = total + shipping;
 
   const handleCheckout = async (e: React.FormEvent) => {
@@ -47,8 +48,6 @@ export default function CartPage() {
         country: 'FR',
         adultConfirmed,
         termsAccepted,
-        shippingFee: shipping,
-        totalWithShipping: finalTotal,
       });
       navigate('/confirmation', {
         state: {
@@ -180,9 +179,9 @@ export default function CartPage() {
                     {shipping === 0 ? (total === 0 ? '—' : 'Offerte') : `${shipping.toFixed(2).replace('.', ',')} €`}
                   </span>
                 </div>
-                {total > 0 && total < 49 && (
+                {total > 0 && total < ORDER_PRICING.FREE_SHIPPING_THRESHOLD && (
                   <p className="cart-free-hint">
-                    Plus que {(49 - total).toFixed(2).replace('.', ',')} € pour la livraison offerte
+                    Plus que {(ORDER_PRICING.FREE_SHIPPING_THRESHOLD - total).toFixed(2).replace('.', ',')} € pour la livraison offerte
                   </p>
                 )}
                 <div className="cart-summary-total">

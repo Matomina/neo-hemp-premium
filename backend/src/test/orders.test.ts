@@ -26,7 +26,8 @@ const mockCreatedOrder = {
   customerEmail: validOrderPayload.customerEmail,
   customerName: validOrderPayload.customerName,
   subtotalCents: 1980,
-  totalCents: 1980,
+  shippingCents: 490,
+  totalCents: 2470,
   status: 'CART_SUBMITTED',
   orderItems: [],
   adultConfirmed: true,
@@ -35,7 +36,6 @@ const mockCreatedOrder = {
   customerPhone: validOrderPayload.customerPhone,
   customerSnapshot: {},
   taxCents: 0,
-  shippingCents: 0,
   currency: 'EUR',
   adminNotes: null,
   note: null,
@@ -72,6 +72,14 @@ describe('POST /api/orders', () => {
 
     expect(res.status).toBe(201);
     expect(res.body.publicRef).toBeDefined();
+    expect(res.body.shippingCents).toBe(490);
+    expect(res.body.totalCents).toBe(2470);
+    expect(mockPrisma.order.create).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({
+        shippingCents: 490,
+        totalCents: 2470,
+      }),
+    }));
   });
 
   it('retourne erreur si adultConfirmed est false', async () => {

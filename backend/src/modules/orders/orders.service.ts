@@ -2,10 +2,10 @@ import { prisma } from '../../config/prisma';
 import { generatePublicRef } from '../../services/invoiceNumber/invoiceNumberService';
 import type { z } from 'zod';
 import type { DraftOrderSchema } from './orders.schemas';
+import { computeOrderPricing } from './orderPricing';
 
 export async function createDraftOrder(data: z.infer<typeof DraftOrderSchema>) {
-  const subtotalCents = data.items.reduce((s, i) => s + Math.round(i.price * 100) * i.quantity, 0);
-  const totalCents = subtotalCents;
+  const { subtotalCents, shippingCents, totalCents } = computeOrderPricing(data.items);
   const publicRef = generatePublicRef('CBD-CMD');
 
   const customerSnapshot = {
@@ -29,6 +29,7 @@ export async function createDraftOrder(data: z.infer<typeof DraftOrderSchema>) {
       customerPhone: data.customerPhone,
       customerSnapshot,
       subtotalCents,
+      shippingCents,
       totalCents,
       adultConfirmed: data.adultConfirmed,
       termsAccepted: data.termsAccepted,

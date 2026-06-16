@@ -1,11 +1,16 @@
 import { prisma } from '../../config/prisma';
+import { PUBLIC_PRODUCT_WHERE } from '../products/publicProductFilters';
 
 export async function getCertificatesByProductSlug(slug: string) {
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    include: { certificates: { where: { status: 'VALIDATED' } } },
+  return prisma.product.findFirst({
+    where: {
+      slug,
+      ...PUBLIC_PRODUCT_WHERE,
+    },
+    include: {
+      certificates: { where: { status: 'VALIDATED' } },
+    },
   });
-  return product?.certificates ?? [];
 }
 
 export async function listAllCertificates() {

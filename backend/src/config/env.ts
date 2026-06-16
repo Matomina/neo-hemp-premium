@@ -12,6 +12,7 @@ const envSchema = z.object({
   ADMIN_EMAIL: z.string().default(''),
   ADMIN_PASS_HASH: z.string().default(''),
   FRONTEND_ORIGINS: z.string().default('http://localhost:5173'),
+  APP_PUBLIC_URL: z.string().default('http://localhost:5173'),
   // SMTP
   SMTP_HOST: z.string().default(''),
   SMTP_PORT: z.string().default('587'),
@@ -33,7 +34,10 @@ const envSchema = z.object({
 // ─── Parse & validate ─────────────────────────────────────────────────────────
 
 function parseEnv() {
-  const parsed = envSchema.safeParse(process.env);
+  const parsed = envSchema.safeParse({
+    ...process.env,
+    APP_PUBLIC_URL: process.env['APP_PUBLIC_URL'] ?? process.env['PUBLIC_FRONTEND_URL'],
+  });
   if (!parsed.success) {
     console.error('[ENV] Configuration invalide :', parsed.error.flatten().fieldErrors);
     process.exit(1);
@@ -43,7 +47,7 @@ function parseEnv() {
 
   // ── Production guards ──────────────────────────────────────────────────────
   if (data.NODE_ENV === 'production') {
-    const required = ['DATABASE_URL', 'JWT_SECRET', 'ADMIN_EMAIL', 'ADMIN_PASS_HASH', 'FRONTEND_ORIGINS'] as const;
+    const required = ['DATABASE_URL', 'JWT_SECRET', 'ADMIN_EMAIL', 'ADMIN_PASS_HASH', 'FRONTEND_ORIGINS', 'APP_PUBLIC_URL'] as const;
     for (const key of required) {
       if (!data[key]) {
         console.error(`[ENV] Variable manquante en production : ${key}`);
@@ -85,6 +89,7 @@ export const ENV = {
   ADMIN_EMAIL: data.ADMIN_EMAIL,
   ADMIN_PASS_HASH: data.ADMIN_PASS_HASH,
   FRONTEND_ORIGINS: data.FRONTEND_ORIGINS.split(',').map((s) => s.trim()),
+  APP_PUBLIC_URL: data.APP_PUBLIC_URL,
   // SMTP
   SMTP_HOST: data.SMTP_HOST,
   SMTP_PORT: parseInt(data.SMTP_PORT, 10),

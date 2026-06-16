@@ -1,13 +1,12 @@
 import { prisma } from '../../config/prisma';
 import type { z } from 'zod';
 import type { ProductQuerySchema } from './products.schemas';
+import { PUBLIC_PRODUCT_WHERE } from './publicProductFilters';
 
 export async function getProducts(query: z.infer<typeof ProductQuerySchema>) {
   const { category, search, page, limit } = query;
   const where = {
-    isActive: true,
-    isSellable: true,
-    launchStatus: 'ACTIVE' as const,
+    ...PUBLIC_PRODUCT_WHERE,
     ...(category ? { category: category.toUpperCase() as never } : {}),
     ...(search ? { OR: [{ name: { contains: search, mode: 'insensitive' as const } }, { shortDescription: { contains: search, mode: 'insensitive' as const } }] } : {}),
   };
@@ -19,5 +18,15 @@ export async function getProducts(query: z.infer<typeof ProductQuerySchema>) {
 }
 
 export async function getProductBySlug(slug: string) {
-  return prisma.product.findUnique({ where: { slug }, include: { certificates: true } });
+  return prisma.product.findFirst({
+    where: {
+      slug,
+      ...PUBLIC_PRODUCT_WHERE,
+    },
+    include: {
+      certificates: {
+        where: { status: 'VALIDATED' },
+      },
+    },
+  });
 }

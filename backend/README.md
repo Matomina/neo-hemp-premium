@@ -71,6 +71,12 @@ npm run dev
 
 API sur `http://localhost:4000`.
 
+Ajouter aussi dans `backend/.env` :
+
+```env
+APP_PUBLIC_URL=http://localhost:5173
+```
+
 ## URLs de test
 
 | URL | Description |
@@ -102,7 +108,10 @@ Password : Admin1234!
 
 - **Stripe** : `STRIPE_ENABLED=false` par défaut. Ne pas activer sans validation conformité CBD.
 - **Emails** : si `SMTP_HOST` est vide, les emails sont loggués en console (aucun envoi réel).
+- **Liens email** : les URLs frontend envoyées par email proviennent de `APP_PUBLIC_URL`.
 - **PDF** : stockés dans `backend/storage/invoices/` (git-ignoré).
+- **Facturation** : les numéros de facture utilisent désormais une séquence dédiée, sûre en cas de validations concurrentes.
+- **Commandes** : les frais de port sont calculés côté backend (`4,90 €` sous `49,00 €`, sinon offerts).
 - **Secrets** : ne jamais committer `.env`, `storage/`, ni de clé Stripe ou SMTP.
 
 ## Conformité CBD

@@ -8,6 +8,10 @@ export const mockPrisma = {
     update: vi.fn(),
     delete: vi.fn(),
   },
+  product: {
+    findFirst: vi.fn(),
+    findMany: vi.fn(),
+  },
   order: {
     findUnique: vi.fn(),
     findMany: vi.fn(),
@@ -39,8 +43,20 @@ export const mockPrisma = {
     update: vi.fn(),
     updateMany: vi.fn(),
   },
+  invoiceSequence: {
+    upsert: vi.fn(),
+  },
   payment: {
+    findFirst: vi.fn(),
     create: vi.fn(),
+    update: vi.fn(),
+    updateMany: vi.fn(),
+  },
+  quoteRequest: {
+    findUnique: vi.fn(),
+    findMany: vi.fn(),
+    update: vi.fn(),
+    count: vi.fn(),
   },
   auditLog: {
     create: vi.fn(),
@@ -50,5 +66,5 @@ export const mockPrisma = {
   },
   $connect: vi.fn(),
   $disconnect: vi.fn(),
-  $transaction: vi.fn(),
+  $transaction: vi.fn(async (callback: (tx: typeof mockPrisma) => unknown) => callback(mockPrisma)),
 };

@@ -7,6 +7,7 @@ process.env['ADMIN_EMAIL'] = 'admin@test.local';
 process.env['ADMIN_PASS_HASH'] = '$2b$12$testhashtesthasttesthasttesthasttesthasttesthasttesthas';
 process.env['DATABASE_URL'] = 'postgresql://test:test@localhost:5432/test';
 process.env['FRONTEND_ORIGINS'] = 'http://localhost:5173';
+process.env['APP_PUBLIC_URL'] = 'http://localhost:5173';
 process.env['STRIPE_ENABLED'] = 'false';
 process.env['SMTP_HOST'] = '';
 process.env['SMTP_USER'] = '';

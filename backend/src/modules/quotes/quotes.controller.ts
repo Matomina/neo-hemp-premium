@@ -10,7 +10,7 @@ import { prisma } from '../../config/prisma';
 import { ENV } from '../../config/env';
 import { logger } from '../../utils/logger';
 
-const ADMIN_URL = `${ENV.FRONTEND_ORIGINS[0]}/admin/devis`;
+const ADMIN_URL = `${ENV.APP_PUBLIC_URL}/admin/devis`;
 const ADMIN_EMAIL_TO = ENV.ADMIN_EMAIL || 'admin@culturebiodiamant.fr';
 
 // POST /api/quotes
@@ -75,16 +75,22 @@ export async function adminApproveQuote(req: Request, res: Response): Promise<vo
   const items = quote.items as Array<{ name: string; quantity: number; unitCents: number; totalCents: number }>;
 
   // Generate invoice
-  const invoiceNumber = await generateInvoiceNumber('Q');
-  const invoice = await prisma.invoice.create({
-    data: {
-      invoiceNumber,
-      type: 'QUOTE',
-      quoteId: quote.id,
-      status: 'ISSUED',
-      amountCents: quote.totalCents,
-      issuedAt: new Date(),
-    },
+  const issuedAt = new Date();
+  const { invoice, invoiceNumber } = await prisma.$transaction(async (tx) => {
+    const nextInvoiceNumber = await generateInvoiceNumber('Q', tx, issuedAt);
+    const createdInvoice = await tx.invoice.create({
+      data: {
+        invoiceNumber: nextInvoiceNumber,
+        type: 'QUOTE',
+        quoteId: quote.id,
+        status: 'ISSUED',
+        amountCents: quote.totalCents,
+        issuedAt,
+      },
+    });
+    await tx.quoteRequest.update({ where: { id }, data: { status: 'APPROVED', approvedAt: issuedAt } });
+
+    return { invoice: createdInvoice, invoiceNumber: nextInvoiceNumber };
   });
 
   let pdfPath: string | undefined;
@@ -93,7 +99,7 @@ export async function adminApproveQuote(req: Request, res: Response): Promise<vo
       invoiceNumber,
       type: 'QUOTE',
       status: 'ISSUED',
-      issuedAt: new Date(),
+      issuedAt,
       customerName: snapshot.name,
       customerEmail: snapshot.email,
       items,
@@ -109,9 +115,6 @@ export async function adminApproveQuote(req: Request, res: Response): Promise<vo
   } catch (err) {
     logger.error('[QUOTE APPROVE] PDF generation failed', err);
   }
-
-  await updateQuote(id, { status: 'APPROVED' });
-  await prisma.quoteRequest.update({ where: { id }, data: { approvedAt: new Date() } });
   await logAudit({ actorId: req.adminUser?.sub, action: 'QUOTE_APPROVED', entityType: 'QuoteRequest', entityId: id });
 
   res.json({ ok: true, invoiceId: invoice.id, invoiceNumber, pdfPath });
@@ -124,7 +127,23 @@ export async function adminSendQuotePayment(req: Request, res: Response): Promis
   if (!quote) { res.status(404).json({ error: 'Quote not found' }); return; }
 
   const snapshot = quote.customerSnapshot as { name: string; email: string };
-  const idempotencyKey = `quote-${quote.id}`;
+  const existingPayment = await prisma.payment.findFirst({
+    where: {
+      quoteId: quote.id,
+      status: { in: ['CREATED', 'PENDING', 'PAID'] },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+  if (existingPayment?.status === 'PAID') {
+    res.json({ ok: true, paymentId: existingPayment.id, checkoutUrl: existingPayment.checkoutUrl, alreadyPaid: true });
+    return;
+  }
+  if (existingPayment && existingPayment.checkoutUrl) {
+    res.json({ ok: true, paymentId: existingPayment.id, checkoutUrl: existingPayment.checkoutUrl, reused: true });
+    return;
+  }
+
+  const idempotencyKey = `quote-${quote.id}-${Date.now()}`;
 
   try {
     const session = await createCheckoutSession({
@@ -139,6 +158,7 @@ export async function adminSendQuotePayment(req: Request, res: Response): Promis
       data: {
         type: 'QUOTE',
         quoteId: quote.id,
+        invoiceId: quote.invoices[0]?.id,
         stripeCheckoutSessionId: session.sessionId,
         stripePaymentIntentId: session.paymentIntentId,
         checkoutUrl: session.checkoutUrl,

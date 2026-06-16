@@ -32,4 +32,8 @@ describe('Validation ENV', () => {
   it('DATABASE_URL est défini', () => {
     expect(process.env['DATABASE_URL']).toBeTruthy();
   });
+
+  it('APP_PUBLIC_URL est défini', () => {
+    expect(process.env['APP_PUBLIC_URL']).toBeTruthy();
+  });
 });
